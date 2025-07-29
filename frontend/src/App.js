@@ -18,6 +18,7 @@ const App = () => {
   const [availableGestures, setAvailableGestures] = useState({});
   const [detectionHistory, setDetectionHistory] = useState([]);
   const [textInput, setTextInput] = useState('');
+  const [isContinuousMode, setIsContinuousMode] = useState(false);
 
   const webcamRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -71,17 +72,22 @@ const App = () => {
           data: detection
         });
         
-        setDetectionHistory(prev => [
-          {
-            timestamp: new Date().toLocaleTimeString(),
-            gesture: detection.gesture,
-            confidence: detection.confidence,
-            urdu: detection.urdu_text,
-            pashto: detection.pashto_text,
-            meaning: detection.meaning
-          },
-          ...prev.slice(0, 4) // Keep last 5 detections
-        ]);
+        // Only add to history if a real gesture was detected
+        if (detection.gesture !== "no_hand_detected") {
+          setDetectionHistory(prev => [
+            {
+              timestamp: new Date().toLocaleTimeString(),
+              gesture: detection.gesture,
+              confidence: detection.confidence,
+              urdu: detection.urdu_text,
+              pashto: detection.pashto_text,
+              meaning: detection.meaning,
+              detection_method: detection.detection_method || "MediaPipe + CV",
+              landmarks_detected: detection.landmarks_detected || false
+            },
+            ...prev.slice(0, 4) // Keep last 5 detections
+          ]);
+        }
       }
     } catch (error) {
       setError(error.response?.data?.detail || 'Gesture detection failed');
@@ -94,15 +100,17 @@ const App = () => {
   const startContinuousDetection = () => {
     if (intervalRef.current) return;
     
+    setIsContinuousMode(true);
     intervalRef.current = setInterval(() => {
       captureAndDetectGesture();
-    }, 1000); // Detect every 1 second
+    }, 1500); // Detect every 1.5 seconds for better performance
   };
 
   const stopContinuousDetection = () => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
+      setIsContinuousMode(false);
     }
   };
 
@@ -170,9 +178,29 @@ const App = () => {
     switch (result.type) {
       case 'gesture_detection':
         const detection = result.data;
+        
+        // Handle no hand detection case
+        if (detection.gesture === "no_hand_detected") {
+          return (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
+              <h3 className="text-xl font-bold mb-4 text-yellow-700">No Hand Detected</h3>
+              <div className="text-center">
+                <div className="text-6xl mb-4">🤚</div>
+                <p className="text-gray-600 mb-2">Place your hand in front of the camera</p>
+                <p className="text-sm text-gray-500">Make sure your hand is clearly visible and well-lit</p>
+                {detection.detection_method && (
+                  <p className="text-xs text-blue-600 mt-2">
+                    Detection Method: {detection.detection_method}
+                  </p>
+                )}
+              </div>
+            </div>
+          );
+        }
+        
         return (
           <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <h3 className="text-xl font-bold mb-4 text-green-600">Gesture Detected!</h3>
+            <h3 className="text-xl font-bold mb-4 text-green-600">✋ Real Hand Gesture Detected!</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-gray-600 mb-1">Gesture</p>
@@ -180,20 +208,40 @@ const App = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-600 mb-1">Confidence</p>
-                <p className="text-lg font-semibold">{(detection.confidence * 100).toFixed(1)}%</p>
+                <div className="flex items-center">
+                  <p className="text-lg font-semibold mr-2">{(detection.confidence * 100).toFixed(1)}%</p>
+                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-green-500 h-2 rounded-full transition-all duration-300" 
+                      style={{width: `${detection.confidence * 100}%`}}
+                    ></div>
+                  </div>
+                </div>
               </div>
               <div>
                 <p className="text-sm text-gray-600 mb-1">Urdu</p>
-                <p className="text-lg font-semibold text-blue-600">{detection.urdu_text}</p>
+                <p className="text-lg font-semibold text-blue-600 urdu-text">{detection.urdu_text}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-600 mb-1">Pashto</p>
-                <p className="text-lg font-semibold text-purple-600">{detection.pashto_text}</p>
+                <p className="text-lg font-semibold text-purple-600 pashto-text">{detection.pashto_text}</p>
               </div>
               <div className="md:col-span-2">
                 <p className="text-sm text-gray-600 mb-1">Meaning</p>
                 <p className="text-lg font-semibold text-gray-800">{detection.meaning}</p>
               </div>
+              {detection.detection_method && (
+                <div className="md:col-span-2 bg-blue-50 p-3 rounded-lg">
+                  <p className="text-sm text-blue-800">
+                    <span className="font-medium">AI Engine:</span> {detection.detection_method}
+                  </p>
+                  {detection.landmarks_detected && (
+                    <p className="text-xs text-blue-600 mt-1">
+                      ✓ Hand landmarks successfully detected and analyzed
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         );
@@ -204,20 +252,20 @@ const App = () => {
         return (
           <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
             <h3 className="text-xl font-bold mb-4 text-blue-600">
-              {result.type === 'speech_to_sign' ? 'Speech Recognition Result' : 'Text Translation Result'}
+              {result.type === 'speech_to_sign' ? '🎤 Speech Recognition Result' : '📝 Text Translation Result'}
             </h3>
             <div className="space-y-4">
               <div>
                 <p className="text-sm text-gray-600 mb-1">
                   {result.type === 'speech_to_sign' ? 'Recognized Text' : 'Input Text'}
                 </p>
-                <p className="text-lg font-semibold">
+                <p className="text-lg font-semibold p-3 bg-gray-50 rounded-lg">
                   {data.recognized_text || data.input_text}
                 </p>
               </div>
               {data.gesture_found ? (
                 <div className="bg-green-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-green-800 mb-2">Matching Gesture Found!</h4>
+                  <h4 className="font-semibold text-green-800 mb-2">🎯 Matching Gesture Found!</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                       <p className="text-sm text-gray-600">Gesture</p>
@@ -229,17 +277,18 @@ const App = () => {
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Urdu</p>
-                      <p className="font-semibold text-blue-600">{data.gesture_data.urdu}</p>
+                      <p className="font-semibold text-blue-600 urdu-text">{data.gesture_data.urdu}</p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Pashto</p>
-                      <p className="font-semibold text-purple-600">{data.gesture_data.pashto}</p>
+                      <p className="font-semibold text-purple-600 pashto-text">{data.gesture_data.pashto}</p>
                     </div>
                   </div>
                 </div>
               ) : (
                 <div className="bg-yellow-50 p-4 rounded-lg">
-                  <p className="text-yellow-800">{data.message}</p>
+                  <p className="text-yellow-800">⚠️ {data.message}</p>
+                  <p className="text-sm text-yellow-600 mt-1">Try different words or check the available gestures list</p>
                 </div>
               )}
             </div>
@@ -258,13 +307,14 @@ const App = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">SignSpeak</h1>
-              <p className="text-gray-600 mt-1">Pakistani Sign Language Translation - YOLOv5 Powered</p>
+              <h1 className="text-3xl font-bold text-gray-900">🤟 SignSpeak</h1>
+              <p className="text-gray-600 mt-1">Pakistani Sign Language Translation - MediaPipe + AI Powered</p>
             </div>
             {stats && (
               <div className="text-right">
                 <p className="text-sm text-gray-600">Total Translations: {stats.total_translations}</p>
                 <p className="text-sm text-gray-600">Available Gestures: {stats.available_gestures}</p>
+                <p className="text-xs text-green-600 font-medium">✓ {stats.ai_engine}</p>
               </div>
             )}
           </div>
@@ -284,7 +334,7 @@ const App = () => {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Sign → Speech
+              👋 Sign → Speech
             </button>
             <button
               onClick={() => setMode('speech-to-sign')}
@@ -294,7 +344,7 @@ const App = () => {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Speech → Sign
+              🎤 Speech → Sign
             </button>
             <button
               onClick={() => setMode('text-to-sign')}
@@ -304,7 +354,7 @@ const App = () => {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Text → Sign
+              📝 Text → Sign
             </button>
           </div>
 
@@ -338,50 +388,68 @@ const App = () => {
           <div className="lg:col-span-2">
             {mode === 'sign-to-speech' && (
               <div className="bg-white rounded-lg shadow-lg p-6">
-                <h2 className="text-xl font-bold mb-4">Camera Feed - Gesture Detection</h2>
+                <h2 className="text-xl font-bold mb-4">📹 Real-time Hand Gesture Detection</h2>
                 <div className="relative">
                   <Webcam
                     ref={webcamRef}
                     screenshotFormat="image/jpeg"
                     className="w-full rounded-lg shadow-md"
                     mirrored={true}
+                    width={640}
+                    height={480}
                   />
                   {isProcessing && (
                     <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg">
                       <div className="text-white text-center">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-                        <p>Detecting gesture...</p>
+                        <p>🔍 Analyzing hand movement...</p>
+                        <p className="text-sm mt-1">MediaPipe AI Processing</p>
                       </div>
+                    </div>
+                  )}
+                  {isContinuousMode && !isProcessing && (
+                    <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium animate-pulse">
+                      🔴 LIVE
                     </div>
                   )}
                 </div>
                 
-                <div className="mt-4 flex gap-4">
+                <div className="mt-4 flex gap-4 flex-wrap">
                   <button
                     onClick={captureAndDetectGesture}
                     disabled={isProcessing}
                     className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                   >
-                    {isProcessing ? 'Processing...' : 'Detect Gesture'}
+                    {isProcessing ? '🔄 Processing...' : '📸 Detect Hand Gesture'}
                   </button>
                   
                   <button
-                    onClick={intervalRef.current ? stopContinuousDetection : startContinuousDetection}
+                    onClick={isContinuousMode ? stopContinuousDetection : startContinuousDetection}
                     className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                      intervalRef.current
+                      isContinuousMode
                         ? 'bg-red-600 text-white hover:bg-red-700'
                         : 'bg-green-600 text-white hover:bg-green-700'
                     }`}
                   >
-                    {intervalRef.current ? 'Stop Continuous' : 'Start Continuous'}
+                    {isContinuousMode ? '⏹️ Stop Live Detection' : '▶️ Start Live Detection'}
                   </button>
+                </div>
+
+                <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                  <h4 className="font-semibold text-blue-800 mb-2">💡 Tips for Best Results:</h4>
+                  <ul className="text-sm text-blue-700 space-y-1">
+                    <li>• Place your hand clearly in front of the camera</li>
+                    <li>• Ensure good lighting conditions</li>
+                    <li>• Make distinct hand gestures</li>
+                    <li>• Keep your hand steady for a moment</li>
+                  </ul>
                 </div>
               </div>
             )}
 
             {mode === 'speech-to-sign' && (
               <div className="bg-white rounded-lg shadow-lg p-6">
-                <h2 className="text-xl font-bold mb-4">Speech Recognition</h2>
+                <h2 className="text-xl font-bold mb-4">🎤 Speech Recognition</h2>
                 <div className="text-center py-12">
                   <div className="mb-6">
                     <div className={`w-24 h-24 rounded-full mx-auto flex items-center justify-center ${
@@ -396,7 +464,7 @@ const App = () => {
                   <p className="text-gray-600 mb-6">
                     Click to start recording speech in {language === 'urdu' ? 'Urdu' : 'Pashto'}
                     <br />
-                    <span className="text-sm">(Demo mode - using mock speech recognition)</span>
+                    <span className="text-sm text-blue-600">(Demo mode - using enhanced mock speech recognition)</span>
                   </p>
                   
                   <button
@@ -404,7 +472,7 @@ const App = () => {
                     disabled={isProcessing}
                     className="bg-purple-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                   >
-                    {isProcessing ? 'Processing...' : 'Record & Translate'}
+                    {isProcessing ? '🎧 Processing...' : '🎤 Record & Translate'}
                   </button>
                 </div>
               </div>
@@ -412,7 +480,7 @@ const App = () => {
 
             {mode === 'text-to-sign' && (
               <div className="bg-white rounded-lg shadow-lg p-6">
-                <h2 className="text-xl font-bold mb-4">Text Input</h2>
+                <h2 className="text-xl font-bold mb-4">📝 Text Input</h2>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -432,7 +500,7 @@ const App = () => {
                     disabled={isProcessing || !textInput.trim()}
                     className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                   >
-                    {isProcessing ? 'Processing...' : 'Convert to Sign'}
+                    {isProcessing ? '⚙️ Processing...' : '🔄 Convert to Sign'}
                   </button>
                 </div>
               </div>
@@ -441,7 +509,7 @@ const App = () => {
             {/* Error Display */}
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 mt-6">
-                <p className="text-red-800">{error}</p>
+                <p className="text-red-800">❌ {error}</p>
               </div>
             )}
 
@@ -454,14 +522,18 @@ const App = () => {
             {/* Detection History */}
             {mode === 'sign-to-speech' && detectionHistory.length > 0 && (
               <div className="bg-white rounded-lg shadow-lg p-6">
-                <h3 className="text-lg font-bold mb-4">Recent Detections</h3>
-                <div className="space-y-3">
+                <h3 className="text-lg font-bold mb-4">🕒 Recent Real Detections</h3>
+                <div className="space-y-3 max-h-64 overflow-y-auto custom-scrollbar">
                   {detectionHistory.map((detection, index) => (
-                    <div key={index} className="border-l-4 border-blue-500 pl-3 py-2">
+                    <div key={index} className="border-l-4 border-green-500 pl-3 py-2 bg-green-50 rounded-r-lg">
                       <p className="text-xs text-gray-500">{detection.timestamp}</p>
                       <p className="font-semibold capitalize">{detection.gesture.replace('_', ' ')}</p>
                       <p className="text-sm text-gray-600">{detection.meaning}</p>
-                      <p className="text-xs text-blue-600">Confidence: {(detection.confidence * 100).toFixed(1)}%</p>
+                      <div className="flex items-center text-xs text-green-600 mt-1">
+                        <span>Confidence: {(detection.confidence * 100).toFixed(1)}%</span>
+                        {detection.landmarks_detected && <span className="ml-2">✓ Landmarks</span>}
+                      </div>
+                      <p className="text-xs text-blue-500">{detection.detection_method}</p>
                     </div>
                   ))}
                 </div>
@@ -470,13 +542,13 @@ const App = () => {
 
             {/* Available Gestures */}
             <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-lg font-bold mb-4">Available Gestures</h3>
-              <div className="space-y-2 max-h-96 overflow-y-auto">
+              <h3 className="text-lg font-bold mb-4">📋 Available Gestures ({Object.keys(availableGestures).length})</h3>
+              <div className="space-y-2 max-h-96 overflow-y-auto custom-scrollbar">
                 {Object.entries(availableGestures).map(([key, gesture]) => (
-                  <div key={key} className="p-3 bg-gray-50 rounded-lg">
+                  <div key={key} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                     <p className="font-medium capitalize">{key.replace('_', ' ')}</p>
-                    <p className="text-sm text-blue-600">{gesture.urdu}</p>
-                    <p className="text-sm text-purple-600">{gesture.pashto}</p>
+                    <p className="text-sm text-blue-600 urdu-text">{gesture.urdu}</p>
+                    <p className="text-sm text-purple-600 pashto-text">{gesture.pashto}</p>
                     <p className="text-xs text-gray-500">{gesture.meaning}</p>
                   </div>
                 ))}
@@ -485,20 +557,30 @@ const App = () => {
 
             {/* Performance Stats */}
             <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-lg font-bold mb-4">Performance</h3>
+              <h3 className="text-lg font-bold mb-4">⚡ AI Performance</h3>
               <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Avg. Latency</span>
-                  <span className="font-semibold">0.45s</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Model Accuracy</span>
-                  <span className="font-semibold">82.4%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Session ID</span>
-                  <span className="font-mono text-sm">{sessionId}</span>
-                </div>
+                {stats && (
+                  <>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">AI Engine</span>
+                      <span className="font-semibold text-green-600">{stats.ai_engine}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Detection Method</span>
+                      <span className="font-semibold text-blue-600">{stats.detection_method}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Model Status</span>
+                      <span className={`font-semibold ${stats.model_status === 'loaded' ? 'text-green-600' : 'text-red-600'}`}>
+                        {stats.model_status === 'loaded' ? '✅ Loaded' : '❌ Not Loaded'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Session ID</span>
+                      <span className="font-mono text-xs">{sessionId}</span>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
