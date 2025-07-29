@@ -331,9 +331,17 @@ async def text_to_sign(request: TextToSignRequest):
 async def get_translation_history(session_id: str):
     """Get translation history for a session"""
     try:
-        history = await db.translation_history.find(
+        history_cursor = db.translation_history.find(
             {"session_id": session_id}
-        ).to_list(100)
+        ).limit(100)
+        
+        history = []
+        async for doc in history_cursor:
+            # Convert ObjectId to string and handle datetime serialization
+            doc["_id"] = str(doc["_id"])
+            if "timestamp" in doc and hasattr(doc["timestamp"], "isoformat"):
+                doc["timestamp"] = doc["timestamp"].isoformat()
+            history.append(doc)
         
         return {
             "success": True,
