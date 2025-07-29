@@ -95,7 +95,11 @@ class GestureRecognitionService:
 class SpeechService:
     def __init__(self):
         self.recognizer = sr.Recognizer()
-        self.tts_engine = pyttsx3.init()
+        try:
+            self.tts_engine = pyttsx3.init()
+        except Exception as e:
+            logger.warning(f"TTS engine initialization failed: {e}. Using mock TTS.")
+            self.tts_engine = None
         
     def speech_to_text(self, audio_data: bytes, language: str = "ur") -> str:
         """Mock speech recognition for Urdu/Pashto"""
