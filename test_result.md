@@ -300,13 +300,12 @@ metadata:
 
 test_plan:
   current_focus:
-    - "YOLOv5 Gesture Recognition API"
-    - "Speech Recognition API (Urdu/Pashto)"
-    - "Core API Endpoints"
     - "Real-time Camera Interface"
     - "Mode Selection UI (Sign↔Speech)"
+    - "Language Selection (Urdu/Pashto)"
+    - "Real-time Results Display"
   stuck_tasks: []
-  test_all: true
+  test_all: false
   test_priority: "high_first"
 
 agent_communication:
