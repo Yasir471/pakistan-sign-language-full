@@ -50,18 +50,169 @@ api_router = APIRouter(prefix="/api")
 # Initialize thread pool for blocking operations
 executor = ThreadPoolExecutor(max_workers=4)
 
-# Mock Pakistani Sign Language Dataset
+# Mock Pakistani Sign Language Dataset - 100 Gestures
 MOCK_GESTURES = {
+    # Basic Greetings & Social
     "salam": {"urdu": "سلام", "pashto": "سلام ورور", "meaning": "Hello/Greetings"},
     "shukriya": {"urdu": "شکریہ", "pashto": "مننه", "meaning": "Thank you"},
     "khuda_hafiz": {"urdu": "خدا حافظ", "pashto": "خدای پامان", "meaning": "Goodbye"},
+    "maaf_karna": {"urdu": "معاف کرنا", "pashto": "بخښنه غواړم", "meaning": "Sorry"},
+    "kya_hal": {"urdu": "کیا حال", "pashto": "څه خبره", "meaning": "How are you"},
+    "khush_amadeed": {"urdu": "خوش آمدید", "pashto": "ښه راغلاست", "meaning": "Welcome"},
+    "allah_hafiz": {"urdu": "اللہ حافظ", "pashto": "اللہ دی پامان", "meaning": "May Allah protect you"},
+    
+    # Family Members
+    "ammi": {"urdu": "امی", "pashto": "مور", "meaning": "Mother"},
+    "abbu": {"urdu": "ابو", "pashto": "پلار", "meaning": "Father"},
+    "bhai": {"urdu": "بھائی", "pashto": "ورور", "meaning": "Brother"},
+    "behn": {"urdu": "بہن", "pashto": "خور", "meaning": "Sister"},
+    "dada": {"urdu": "دادا", "pashto": "نیکه", "meaning": "Grandfather"},
+    "dadi": {"urdu": "دادی", "pashto": "انا", "meaning": "Grandmother"},
+    "chacha": {"urdu": "چاچا", "pashto": "تره", "meaning": "Uncle"},
+    "khala": {"urdu": "خالہ", "pashto": "ترور", "meaning": "Aunt"},
+    "beta": {"urdu": "بیٹا", "pashto": "زوی", "meaning": "Son"},
+    "beti": {"urdu": "بیٹی", "pashto": "لور", "meaning": "Daughter"},
+    
+    # Basic Needs & Objects  
     "paani": {"urdu": "پانی", "pashto": "اوبه", "meaning": "Water"},
     "khana": {"urdu": "کھانا", "pashto": "خواړه", "meaning": "Food"},
     "ghar": {"urdu": "گھر", "pashto": "کور", "meaning": "Home"},
     "kitab": {"urdu": "کتاب", "pashto": "کتاب", "meaning": "Book"},
+    "qalam": {"urdu": "قلم", "pashto": "قلم", "meaning": "Pen"},
     "kaam": {"urdu": "کام", "pashto": "کار", "meaning": "Work"},
     "dost": {"urdu": "دوست", "pashto": "ملګری", "meaning": "Friend"},
-    "madad": {"urdu": "مدد", "pashto": "مرسته", "meaning": "Help"}
+    "madad": {"urdu": "مدد", "pashto": "مرسته", "meaning": "Help"},
+    "kamra": {"urdu": "کمرہ", "pashto": "کوټه", "meaning": "Room"},
+    "darwaza": {"urdu": "دروازہ", "pashto": "دروازه", "meaning": "Door"},
+    
+    # Food Items
+    "roti": {"urdu": "روٹی", "pashto": "ډوډۍ", "meaning": "Bread"},
+    "chawal": {"urdu": "چاول", "pashto": "وریژې", "meaning": "Rice"},
+    "gosht": {"urdu": "گوشت", "pashto": "غوښه", "meaning": "Meat"},
+    "dudh": {"urdu": "دودھ", "pashto": "شیدې", "meaning": "Milk"},
+    "chai": {"urdu": "چائے", "pashto": "چای", "meaning": "Tea"},
+    "phal": {"urdu": "پھل", "pashto": "میوه", "meaning": "Fruit"},
+    "sabzi": {"urdu": "سبزی", "pashto": "سابه", "meaning": "Vegetable"},
+    "namak": {"urdu": "نمک", "pashto": "مالګه", "meaning": "Salt"},
+    "cheeni": {"urdu": "چینی", "pashto": "شکره", "meaning": "Sugar"},
+    "tel": {"urdu": "تیل", "pashto": "غوړ", "meaning": "Oil"},
+    
+    # Body Parts
+    "sar": {"urdu": "سر", "pashto": "سر", "meaning": "Head"},
+    "ankh": {"urdu": "آنکھ", "pashto": "سترګه", "meaning": "Eye"},
+    "kaan": {"urdu": "کان", "pashto": "غوږ", "meaning": "Ear"},
+    "naak": {"urdu": "ناک", "pashto": "پزه", "meaning": "Nose"},
+    "munh": {"urdu": "منہ", "pashto": "خوله", "meaning": "Mouth"},
+    "haath": {"urdu": "ہاتھ", "pashto": "لاس", "meaning": "Hand"},
+    "pair": {"urdu": "پیر", "pashto": "پښه", "meaning": "Foot"},
+    "dil": {"urdu": "دل", "pashto": "زړه", "meaning": "Heart"},
+    "pet": {"urdu": "پیٹ", "pashto": "خیټه", "meaning": "Stomach"},
+    "tang": {"urdu": "ٹانگ", "pashto": "پښه", "meaning": "Leg"},
+    
+    # Colors
+    "safed": {"urdu": "سفید", "pashto": "سپین", "meaning": "White"},
+    "kala": {"urdu": "کالا", "pashto": "تور", "meaning": "Black"},
+    "lal": {"urdu": "لال", "pashto": "سور", "meaning": "Red"},
+    "hara": {"urdu": "ہرا", "pashto": "شین", "meaning": "Green"},
+    "neela": {"urdu": "نیلا", "pashto": "شین", "meaning": "Blue"},
+    "peela": {"urdu": "پیلا", "pashto": "ژیړ", "meaning": "Yellow"},
+    "gulabi": {"urdu": "گلابی", "pashto": "ګلابي", "meaning": "Pink"},
+    "narangi": {"urdu": "نارنگی", "pashto": "نارنجي", "meaning": "Orange"},
+    
+    # Numbers 1-10
+    "ek": {"urdu": "ایک", "pashto": "یو", "meaning": "One"},
+    "do": {"urdu": "دو", "pashto": "دوه", "meaning": "Two"},
+    "teen": {"urdu": "تین", "pashto": "درې", "meaning": "Three"},
+    "chaar": {"urdu": "چار", "pashto": "څلور", "meaning": "Four"},
+    "paanch": {"urdu": "پانچ", "pashto": "پنځه", "meaning": "Five"},
+    "che": {"urdu": "چھ", "pashto": "شپږ", "meaning": "Six"},
+    "saat": {"urdu": "سات", "pashto": "اووه", "meaning": "Seven"},
+    "aath": {"urdu": "آٹھ", "pashto": "اته", "meaning": "Eight"},
+    "nau": {"urdu": "نو", "pashto": "نهه", "meaning": "Nine"},
+    "das": {"urdu": "دس", "pashto": "لس", "meaning": "Ten"},
+    
+    # Emotions & States
+    "khush": {"urdu": "خوش", "pashto": "خوښ", "meaning": "Happy"},
+    "udaas": {"urdu": "اداس", "pashto": "خپه", "meaning": "Sad"},
+    "gussa": {"urdu": "غصہ", "pashto": "قهر", "meaning": "Angry"},
+    "dar": {"urdu": "ڈر", "pashto": "ویره", "meaning": "Fear"},
+    "mohabbat": {"urdu": "محبت", "pashto": "مینه", "meaning": "Love"},
+    "thak_gaya": {"urdu": "تھک گیا", "pashto": "ستړی یم", "meaning": "Tired"},
+    "beemar": {"urdu": "بیمار", "pashto": "ناروغ", "meaning": "Sick"},
+    "sehat_mand": {"urdu": "صحت مند", "pashto": "روغ", "meaning": "Healthy"},
+    
+    # Daily Activities
+    "uthna": {"urdu": "اٹھنا", "pashto": "پاڅیدل", "meaning": "Wake up"},
+    "sona": {"urdu": "سونا", "pashto": "ویده کیدل", "meaning": "Sleep"},
+    "khana_khana": {"urdu": "کھانا کھانا", "pashto": "خواړه خوړل", "meaning": "Eat food"},
+    "paani_peena": {"urdu": "پانی پینا", "pashto": "اوبه څښل", "meaning": "Drink water"},
+    "nahana": {"urdu": "نہانا", "pashto": "حمام کول", "meaning": "Take bath"},
+    "parhna": {"urdu": "پڑھنا", "pashto": "لوستل", "meaning": "Read"},
+    "likhna": {"urdu": "لکھنا", "pashto": "لیکل", "meaning": "Write"},
+    "chalna": {"urdu": "چلنا", "pashto": "تلل", "meaning": "Walk"},
+    "daura": {"urdu": "دوڑنا", "pashto": "منډه کول", "meaning": "Run"},
+    "baitna": {"urdu": "بیٹھنا", "pashto": "کښیناستل", "meaning": "Sit"},
+    
+    # Education & Learning
+    "school": {"urdu": "اسکول", "pashto": "ښوونځی", "meaning": "School"},
+    "teacher": {"urdu": "استاد", "pashto": "ښوونکی", "meaning": "Teacher"},
+    "student": {"urdu": "طالب علم", "pashto": "زده کوونکی", "meaning": "Student"},
+    "exam": {"urdu": "امتحان", "pashto": "ازموینه", "meaning": "Examination"},
+    "homework": {"urdu": "گھر کا کام", "pashto": "د کور کار", "meaning": "Homework"},
+    "lesson": {"urdu": "سبق", "pashto": "درس", "meaning": "Lesson"},
+    "university": {"urdu": "یونیورسٹی", "pashto": "پوهنتون", "meaning": "University"},  
+    "degree": {"urdu": "ڈگری", "pashto": "سند", "meaning": "Degree"},
+    
+    # Professional & Work
+    "doctor": {"urdu": "ڈاکٹر", "pashto": "ډاکټر", "meaning": "Doctor"},
+    "engineer": {"urdu": "انجینیر", "pashto": "انجنیر", "meaning": "Engineer"},
+    "lawyer": {"urdu": "وکیل", "pashto": "وکیل", "meaning": "Lawyer"},
+    "police": {"urdu": "پولیس", "pashto": "پولیس", "meaning": "Police"},
+    "driver": {"urdu": "ڈرائیور", "pashto": "موټر چلوونکی", "meaning": "Driver"},
+    "shopkeeper": {"urdu": "دکاندار", "pashto": "دکاندار", "meaning": "Shopkeeper"},
+    "farmer": {"urdu": "کسان", "pashto": "بزګر", "meaning": "Farmer"},
+    "office": {"urdu": "دفتر", "pashto": "دفتر", "meaning": "Office"},
+    
+    # Transportation
+    "gari": {"urdu": "گاڑی", "pashto": "موټر", "meaning": "Car"},
+    "bus": {"urdu": "بس", "pashto": "بس", "meaning": "Bus"},
+    "rickshaw": {"urdu": "رکشہ", "pashto": "رکشا", "meaning": "Rickshaw"},
+    "cycle": {"urdu": "سائیکل", "pashto": "بایسکل", "meaning": "Bicycle"},
+    "train": {"urdu": "ریل گاڑی", "pashto": "اورګاډی", "meaning": "Train"},
+    "plane": {"urdu": "ہوائی جہاز", "pashto": "الوتکه", "meaning": "Airplane"},
+    
+    # Time & Weather
+    "waqt": {"urdu": "وقت", "pashto": "وخت", "meaning": "Time"},
+    "din": {"urdu": "دن", "pashto": "ورځ", "meaning": "Day"},
+    "raat": {"urdu": "رات", "pashto": "شپه", "meaning": "Night"},
+    "subah": {"urdu": "صبح", "pashto": "سهار", "meaning": "Morning"},
+    "shaam": {"urdu": "شام", "pashto": "ماښام", "meaning": "Evening"},
+    "saal": {"urdu": "سال", "pashto": "کال", "meaning": "Year"},
+    "mahina": {"urdu": "مہینہ", "pashto": "میاشت", "meaning": "Month"},
+    "hafta": {"urdu": "ہفتہ", "pashto": "اونۍ", "meaning": "Week"},
+    "barish": {"urdu": "بارش", "pashto": "باران", "meaning": "Rain"},
+    "dhoop": {"urdu": "دھوپ", "pashto": "لمر", "meaning": "Sunshine"},
+    
+    # Religious Terms
+    "namaz": {"urdu": "نماز", "pashto": "لمونځ", "meaning": "Prayer"},
+    "quran": {"urdu": "قرآن", "pashto": "قرآن", "meaning": "Quran"},
+    "masjid": {"urdu": "مسجد", "pashto": "جومات", "meaning": "Mosque"},
+    "roza": {"urdu": "روزہ", "pashto": "روژه", "meaning": "Fast"},  
+    "zakat": {"urdu": "زکات", "pashto": "زکات", "meaning": "Charity"},
+    "hajj": {"urdu": "حج", "pashto": "حج", "meaning": "Pilgrimage"},
+    "eid": {"urdu": "عید", "pashto": "اختر", "meaning": "Festival"},
+    
+    # Common Verbs
+    "jana": {"urdu": "جانا", "pashto": "تلل", "meaning": "Go"},
+    "ana": {"urdu": "آنا", "pashto": "راتلل", "meaning": "Come"},
+    "karna": {"urdu": "کرنا", "pashto": "کول", "meaning": "Do"},
+    "dekhna": {"urdu": "دیکھنا", "pashto": "کتل", "meaning": "See"},
+    "sunna": {"urdu": "سننا", "pashto": "اورېدل", "meaning": "Listen"},
+    "bolna": {"urdu": "بولنا", "pashto": "ویل", "meaning": "Speak"},
+    "samjhna": {"urdu": "سمجھنا", "pashto": "پوهیدل", "meaning": "Understand"},
+    "dena": {"urdu": "دینا", "pashto": "ورکول", "meaning": "Give"},
+    "lena": {"urdu": "لینا", "pashto": "اخیستل", "meaning": "Take"},
+    "kharidna": {"urdu": "خریدنا", "pashto": "اخیستل", "meaning": "Buy"}
 }
 
 # Mock gesture detection confidence
