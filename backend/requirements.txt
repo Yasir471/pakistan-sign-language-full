@@ -23,3 +23,21 @@ numpy>=1.26.0
 python-multipart>=0.0.9
 jq>=1.6.0
 typer>=0.9.0
+# Computer Vision and AI Libraries
+opencv-python>=4.8.0
+torch>=2.0.0
+torchvision>=0.15.0
+ultralytics>=8.0.0
+Pillow>=10.0.0
+# Speech Processing Libraries
+SpeechRecognition>=3.10.0
+pyttsx3>=2.90
+gTTS>=2.4.0
+# Audio Processing
+pyaudio>=0.2.11
+pydub>=0.25.1
+# Image Processing
+matplotlib>=3.7.0
+seaborn>=0.12.0
+# Base64 and file handling
+base64io>=1.0.3
