@@ -1,0 +1,122 @@
+{
+  "0": {
+    "name": "salam",
+    "urdu": "سلام",
+    "pashto": "سلام ورور",
+    "english": "Hello"
+  },
+  "1": {
+    "name": "shukriya", 
+    "urdu": "شکریہ",
+    "pashto": "مننه",
+    "english": "Thank you"
+  },
+  "2": {
+    "name": "khuda_hafiz",
+    "urdu": "خدا حافظ", 
+    "pashto": "خدای پامان",
+    "english": "Goodbye"
+  },
+  "3": {
+    "name": "paani",
+    "urdu": "پانی",
+    "pashto": "اوبه", 
+    "english": "Water"
+  },
+  "4": {
+    "name": "khana",
+    "urdu": "کھانا",
+    "pashto": "خواړه",
+    "english": "Food"
+  },
+  "5": {
+    "name": "madad",
+    "urdu": "مدد",
+    "pashto": "مرسته", 
+    "english": "Help"
+  },
+  "6": {
+    "name": "ek",
+    "urdu": "ایک",
+    "pashto": "یو",
+    "english": "One"
+  },
+  "7": {
+    "name": "do", 
+    "urdu": "دو",
+    "pashto": "دوه",
+    "english": "Two"
+  },
+  "8": {
+    "name": "teen",
+    "urdu": "تین",
+    "pashto": "درې",
+    "english": "Three"
+  },
+  "9": {
+    "name": "ghar",
+    "urdu": "گھر",
+    "pashto": "کور",
+    "english": "Home"
+  },
+  "10": {
+    "name": "kitab",
+    "urdu": "کتاب",
+    "pashto": "کتاب",
+    "english": "Book"
+  },
+  "11": {
+    "name": "qalam",
+    "urdu": "قلم", 
+    "pashto": "قلم",
+    "english": "Pen"
+  },
+  "12": {
+    "name": "ammi",
+    "urdu": "امی",
+    "pashto": "مور",
+    "english": "Mother"
+  },
+  "13": {
+    "name": "abbu",
+    "urdu": "ابو",
+    "pashto": "پلار", 
+    "english": "Father"
+  },
+  "14": {
+    "name": "bhai",
+    "urdu": "بھائی",
+    "pashto": "ورور",
+    "english": "Brother"
+  },
+  "15": {
+    "name": "behn",
+    "urdu": "بہن",
+    "pashto": "خور",
+    "english": "Sister"
+  },
+  "16": {
+    "name": "chaar",
+    "urdu": "چار",
+    "pashto": "څلور",
+    "english": "Four"
+  },
+  "17": {
+    "name": "paanch",
+    "urdu": "پانچ", 
+    "pashto": "پنځه",
+    "english": "Five"
+  },
+  "18": {
+    "name": "school",
+    "urdu": "اسکول",
+    "pashto": "ښوونځی",
+    "english": "School"
+  },
+  "19": {
+    "name": "doctor",
+    "urdu": "ڈاکٹر",
+    "pashto": "ډاکټر", 
+    "english": "Doctor"
+  }
+}
