@@ -15,6 +15,10 @@ from pathlib import Path
 import argparse
 from PIL import Image, ImageDraw, ImageFont
 import pyttsx3
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 class SpeechToSign:
     def __init__(self, labels_path="labels.json", images_path="gesture_images/"):
