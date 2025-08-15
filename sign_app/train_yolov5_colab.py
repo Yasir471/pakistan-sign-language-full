@@ -209,19 +209,22 @@ def main():
 
 if __name__ == "__main__":
     # For Google Colab usage
-    if 'google.colab' in str(get_ipython()):
+    try:
+        # Check if running in Colab
+        import google.colab
         print("🔬 Running in Google Colab environment")
         
-        # Install dependencies
-        !pip install ultralytics pyyaml
+        # Install dependencies in Colab
+        os.system("pip install ultralytics pyyaml")
         
         # Clone YOLOv5 if not exists
         if not os.path.exists('yolov5'):
-            !git clone https://github.com/ultralytics/yolov5
-            %cd yolov5
-            !pip install -r requirements.txt
+            os.system("git clone https://github.com/ultralytics/yolov5")
+            os.chdir('yolov5')
+            os.system("pip install -r requirements.txt")
+            os.chdir('..')
         
         main()
-    else:
+    except ImportError:
         print("💻 Run this script in Google Colab for best results")
         main()
