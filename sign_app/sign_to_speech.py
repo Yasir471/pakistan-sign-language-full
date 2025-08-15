@@ -13,6 +13,11 @@ import time
 import numpy as np
 from pathlib import Path
 import argparse
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 class SignToSpeech:
     def __init__(self, model_path="best.pt", labels_path="labels.json"):
