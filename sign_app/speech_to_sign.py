@@ -222,7 +222,7 @@ class SpeechToSign:
                         outline='black', width=2, fill='lightgray')
     
     def listen_for_speech(self):
-        """Listen for speech input"""
+        """Listen for speech input using Google Speech API"""
         print("🎤 Listening for speech... (Say something in Urdu, Pashto, or English)")
         
         try:
@@ -232,12 +232,15 @@ class SpeechToSign:
                 
             print("🔄 Processing speech...")
             
-            # Try to recognize speech in multiple languages
+            # Get Google API key from environment
+            google_api_key = os.getenv('GOOGLE_SPEECH_API_KEY')
+            
             recognized_text = None
             
-            # Try English first
+            # Try to recognize speech in multiple languages with API key
             try:
-                text = self.recognizer.recognize_google(audio, language='en')
+                # Try English first with API key
+                text = self.recognizer.recognize_google(audio, key=google_api_key, language='en')
                 print(f"🔤 Recognized (English): {text}")
                 recognized_text = text.lower()
             except:
@@ -246,16 +249,25 @@ class SpeechToSign:
             # If English failed, try Urdu
             if not recognized_text:
                 try:
-                    text = self.recognizer.recognize_google(audio, language='ur')
+                    text = self.recognizer.recognize_google(audio, key=google_api_key, language='ur')
                     print(f"🔤 Recognized (Urdu): {text}")
                     recognized_text = text
                 except:
                     pass
             
-            # If both failed, try general recognition
+            # If both failed, try Pashto (use Farsi as closest match)
             if not recognized_text:
                 try:
-                    text = self.recognizer.recognize_google(audio)
+                    text = self.recognizer.recognize_google(audio, key=google_api_key, language='fa')
+                    print(f"🔤 Recognized (Farsi/Pashto): {text}")
+                    recognized_text = text
+                except:
+                    pass
+                    
+            # If all specific languages failed, try general recognition
+            if not recognized_text:
+                try:
+                    text = self.recognizer.recognize_google(audio, key=google_api_key)
                     print(f"🔤 Recognized (Auto): {text}")
                     recognized_text = text.lower()
                 except:
@@ -271,7 +283,16 @@ class SpeechToSign:
             return None
         except sr.RequestError as e:
             print(f"❌ Speech recognition error: {e}")
-            return None
+            # Fallback to free Google Speech Recognition
+            try:
+                with self.microphone as source:
+                    audio = self.recognizer.listen(source, timeout=5, phrase_time_limit=3)
+                text = self.recognizer.recognize_google(audio)
+                print(f"🔤 Recognized (Fallback): {text}")
+                return text.lower()
+            except:
+                print("❌ Fallback recognition also failed")
+                return None
     
     def find_gesture_for_text(self, text):
         """Find matching gesture for recognized text"""
