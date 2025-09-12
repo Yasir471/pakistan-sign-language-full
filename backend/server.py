@@ -745,8 +745,8 @@ async def get_stats():
             "speech_to_sign_count": speech_to_sign,
             "available_gestures": len(MOCK_GESTURES),
             "model_status": "loaded" if gesture_service.model_loaded else "not_loaded",
-            "ai_engine": "MediaPipe + Computer Vision",
-            "detection_method": "Real-time Hand Landmarks"
+            "technology_engine": "YOLOv5 + Speech Recognition",
+            "detection_method": "Real-time Hand Tracking"
         }
         
     except Exception as e:
