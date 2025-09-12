@@ -314,7 +314,7 @@ const App = () => {
               <div className="text-right">
                 <p className="text-sm text-gray-600">Total Translations: {stats.total_translations}</p>
                 <p className="text-sm text-gray-600">Available Gestures: {stats.available_gestures}</p>
-                <p className="text-xs text-green-600 font-medium">✅ {stats.ai_engine}</p>
+                <p className="text-xs text-green-600 font-medium">✅ {stats.technology_engine}</p>
               </div>
             )}
           </div>
