@@ -562,7 +562,7 @@ const App = () => {
                 {stats && (
                   <>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">AI Engine</span>
+                      <span className="text-gray-600">Technology Engine</span>
                       <span className="font-semibold text-green-600">{stats.ai_engine}</span>
                     </div>
                     <div className="flex justify-between">
