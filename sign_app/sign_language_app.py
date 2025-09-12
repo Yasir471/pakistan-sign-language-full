@@ -437,6 +437,26 @@ class PakistaniSignLanguageApp:
             except Exception as e:
                 print(f"❌ Unexpected error: {e}")
     
+    def run_story_mode(self):
+        """Run Pakistani story mode with 3D character"""
+        try:
+            from pakistani_story import PakistaniStoryTeller
+            
+            print("\n📚 PAKISTANI STORY MODE")
+            print("=" * 80)
+            print("🦊 Featured Story: The Sour Grapes (انگور تو کھٹے ہیں)")
+            print("🎭 Interactive 3D Character Demonstrations")
+            print("🌐 Available in: Urdu, Pashto, English")
+            print("=" * 80)
+            
+            story_teller = PakistaniStoryTeller()
+            story_teller.interactive_story_mode()
+            
+        except ImportError:
+            print("❌ Story module not available")
+        except Exception as e:
+            print(f"❌ Error running story mode: {e}")
+    
     def demo_character(self):
         """Demo the 3D character with sample gestures"""
         print("\n🎭 3D Character Demo")
