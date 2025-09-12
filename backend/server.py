@@ -579,7 +579,7 @@ async def get_available_gestures():
 
 @api_router.post("/detect-gesture")
 async def detect_gesture(request: GestureDetectionRequest):
-    """Detect gesture from camera image using real MediaPipe + Computer Vision"""
+    """Detect gesture from camera image using YOLOv5 + Hand Tracking"""
     try:
         # Load model if not loaded
         if not gesture_service.model_loaded:
