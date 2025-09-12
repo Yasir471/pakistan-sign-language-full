@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Sign Language Translation into Native Pakistani Language Using YOLOv5 - A real-time sign language translation application with bidirectional translation (Sign↔Speech) for Urdu and Pashto languages"
+user_problem_statement: "Pakistani Sign Language Translation App with 3D Character - A comprehensive real-time sign language translation application with 3D animated character demonstrations, supporting 132 Pakistani sign language gestures for Urdu, Pashto, and English languages"
 
 backend:
   - task: "YOLOv5 Gesture Recognition API"
