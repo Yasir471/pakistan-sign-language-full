@@ -554,15 +554,17 @@ class BackendTester:
     
     def run_all_tests(self):
         """Run all backend API tests"""
-        print("=" * 60)
-        print("SIGN LANGUAGE TRANSLATION BACKEND API TESTS")
-        print("=" * 60)
+        print("=" * 80)
+        print("SIGN LANGUAGE TRANSLATION BACKEND API + SIGN_APP TESTS")
+        print("=" * 80)
         print(f"Session ID: {self.session_id}")
         print(f"Backend URL: {API_BASE}")
-        print("-" * 60)
+        print(f"Sign App Path: {self.sign_app_path}")
+        print("-" * 80)
         
         # Run tests in order of priority
         tests = [
+            # Backend API Tests
             ("Root Endpoint", self.test_root_endpoint),
             ("Pakistani Gestures Dataset", self.test_gestures_endpoint),
             ("YOLOv5 Gesture Detection", self.test_gesture_detection),
@@ -570,31 +572,46 @@ class BackendTester:
             ("Text-to-Sign Translation", self.test_text_to_sign),
             ("Translation History", self.test_translation_history),
             ("Application Statistics", self.test_statistics),
-            ("Error Handling", self.test_error_handling)
+            ("Error Handling", self.test_error_handling),
+            
+            # New Sign App Component Tests
+            ("3D Character Animation System", self.test_3d_character_system),
+            ("Expanded Gesture Database (132 gestures)", self.test_expanded_gesture_database),
+            ("Enhanced Speech Recognition", self.test_enhanced_speech_recognition),
+            ("Complete Sign Language App", self.test_complete_sign_language_app),
+            ("Launcher System", self.test_launcher_system)
         ]
         
         passed = 0
         total = len(tests)
+        backend_passed = 0
+        sign_app_passed = 0
         
-        for test_name, test_func in tests:
+        for i, (test_name, test_func) in enumerate(tests):
             try:
                 if test_func():
                     passed += 1
+                    if i < 8:  # First 8 are backend tests
+                        backend_passed += 1
+                    else:  # Rest are sign_app tests
+                        sign_app_passed += 1
                 time.sleep(0.5)  # Brief pause between tests
             except Exception as e:
                 self.log_test(test_name, False, f"Test execution failed: {str(e)}")
         
-        print("-" * 60)
+        print("-" * 80)
         print(f"RESULTS: {passed}/{total} tests passed")
+        print(f"Backend API: {backend_passed}/8 tests passed")
+        print(f"Sign App Components: {sign_app_passed}/5 tests passed")
         
         if passed == total:
-            print("🎉 ALL TESTS PASSED! Backend API is working correctly.")
+            print("🎉 ALL TESTS PASSED! Backend API and Sign App components working correctly.")
         elif passed >= total * 0.8:  # 80% pass rate
             print("⚠️  Most tests passed. Minor issues detected.")
         else:
-            print("❌ Multiple test failures. Backend needs attention.")
+            print("❌ Multiple test failures. System needs attention.")
         
-        print("=" * 60)
+        print("=" * 80)
         return passed, total, self.test_results
 
 if __name__ == "__main__":
