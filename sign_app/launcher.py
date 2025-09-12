@@ -206,18 +206,21 @@ def show_system_info():
     
     # Dependencies info
     print(f"\n📦 Key Dependencies:")
-    deps = ['pygame', 'torch', 'ultralytics', 'cv2', 'speechrecognition']
-    for dep in deps:
+    deps = {
+        'pygame': 'pygame',
+        'torch': 'torch', 
+        'ultralytics': 'ultralytics',
+        'cv2': 'opencv-python',
+        'speech_recognition': 'speechrecognition'
+    }
+    
+    for import_name, package_name in deps.items():
         try:
-            if dep == 'cv2':
-                import cv2
-                print(f"   ✅ opencv-python: {cv2.__version__}")
-            else:
-                module = __import__(dep)
-                version = getattr(module, '__version__', 'unknown')
-                print(f"   ✅ {dep}: {version}")
+            module = __import__(import_name)
+            version = getattr(module, '__version__', 'unknown')
+            print(f"   ✅ {package_name}: {version}")
         except ImportError:
-            print(f"   ❌ {dep}: not installed")
+            print(f"   ❌ {package_name}: not installed")
     
     # Environment info
     print(f"\n🌍 Environment:")
