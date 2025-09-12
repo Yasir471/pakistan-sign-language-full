@@ -30,8 +30,7 @@ def check_dependencies():
         'speech_recognition': 'speechrecognition',
         'pyttsx3': 'pyttsx3',
         'numpy': 'numpy',
-        'PIL': 'pillow',
-        'mediapipe': 'mediapipe'
+        'PIL': 'pillow'
     }
     
     missing_packages = []
