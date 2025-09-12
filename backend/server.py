@@ -286,7 +286,7 @@ class RealGestureRecognitionService:
                                 "pashto_text": gesture_info["pashto"],
                                 "meaning": gesture_info["meaning"],
                                 "landmarks_detected": True,
-                                "detection_method": "MediaPipe + CV"
+                                "detection_method": "YOLOv5 + Hand Tracking"
                             }
             
             # No hand detected
