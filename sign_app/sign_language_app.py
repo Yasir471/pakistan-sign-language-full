@@ -412,7 +412,7 @@ class PakistaniSignLanguageApp:
                 print("5. 📚 Pakistani Story Mode (انگور تو کھٹے ہیں)")
                 print("6. ❌ Exit")
                 
-                choice = input("\n👉 Enter your choice (1-5): ").strip()
+                choice = input("\n👉 Enter your choice (1-6): ").strip()
                 
                 if choice == '1':
                     self.speech_to_sign()
