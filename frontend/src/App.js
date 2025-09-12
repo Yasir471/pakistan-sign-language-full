@@ -233,11 +233,11 @@ const App = () => {
               {detection.detection_method && (
                 <div className="md:col-span-2 bg-blue-50 p-3 rounded-lg">
                   <p className="text-sm text-blue-800">
-                    <span className="font-medium">AI Engine:</span> {detection.detection_method}
+                    <span className="font-medium">Detection Engine:</span> {detection.detection_method}
                   </p>
                   {detection.landmarks_detected && (
                     <p className="text-xs text-blue-600 mt-1">
-                      ✓ Hand landmarks successfully detected and analyzed
+                      ✓ Hand tracking successfully detected and analyzed
                     </p>
                   )}
                 </div>
