@@ -289,6 +289,269 @@ class BackendTester:
             self.log_test("Error Handling", False, f"Exception: {str(e)}")
             return False
     
+    # ========== NEW SIGN_APP COMPONENT TESTS ==========
+    
+    def test_3d_character_system(self):
+        """Test 3D Character Animation System"""
+        try:
+            character_file = self.sign_app_path / "character_3d.py"
+            if not character_file.exists():
+                self.log_test("3D Character System", False, "character_3d.py file not found")
+                return False
+            
+            # Test if the file can be imported
+            spec = importlib.util.spec_from_file_location("character_3d", character_file)
+            character_module = importlib.util.module_from_spec(spec)
+            
+            # Mock pygame to avoid display issues in testing
+            import sys
+            from unittest.mock import MagicMock
+            sys.modules['pygame'] = MagicMock()
+            sys.modules['pygame.display'] = MagicMock()
+            sys.modules['pygame.time'] = MagicMock()
+            sys.modules['pygame.font'] = MagicMock()
+            
+            spec.loader.exec_module(character_module)
+            
+            # Test if SignLanguageCharacter class exists
+            if hasattr(character_module, 'SignLanguageCharacter'):
+                character_class = getattr(character_module, 'SignLanguageCharacter')
+                
+                # Test initialization (mocked)
+                try:
+                    character = character_class(width=800, height=600)
+                    
+                    # Test gesture pose mappings
+                    if hasattr(character, 'gesture_poses'):
+                        pose_count = len(character.gesture_poses)
+                        
+                        # Check for key Pakistani gestures
+                        key_gestures = ['salam', 'shukriya', 'ek', 'do', 'paani', 'khana']
+                        found_gestures = [g for g in key_gestures if g in character.gesture_poses]
+                        
+                        if len(found_gestures) >= 4:  # At least 4 key gestures should be mapped
+                            self.log_test("3D Character System", True, 
+                                        f"Character initialized with {pose_count} gesture poses, found {len(found_gestures)} key gestures")
+                            return True
+                        else:
+                            self.log_test("3D Character System", False, 
+                                        f"Missing key gesture poses. Found: {found_gestures}")
+                            return False
+                    else:
+                        self.log_test("3D Character System", False, "No gesture_poses attribute found")
+                        return False
+                        
+                except Exception as e:
+                    self.log_test("3D Character System", False, f"Character initialization failed: {str(e)}")
+                    return False
+            else:
+                self.log_test("3D Character System", False, "SignLanguageCharacter class not found")
+                return False
+                
+        except Exception as e:
+            self.log_test("3D Character System", False, f"Module import failed: {str(e)}")
+            return False
+    
+    def test_expanded_gesture_database(self):
+        """Test Expanded Gesture Database (132 gestures)"""
+        try:
+            labels_file = self.sign_app_path / "labels.json"
+            if not labels_file.exists():
+                self.log_test("Expanded Gesture Database", False, "labels.json file not found")
+                return False
+            
+            with open(labels_file, 'r', encoding='utf-8') as f:
+                labels = json.load(f)
+            
+            gesture_count = len(labels)
+            
+            # Check if we have the expected 132 gestures
+            if gesture_count >= 130:  # Allow some flexibility
+                # Verify structure of gestures
+                sample_gesture = list(labels.values())[0]
+                required_fields = ['name', 'urdu', 'pashto', 'english']
+                
+                if all(field in sample_gesture for field in required_fields):
+                    # Check for different categories
+                    categories_found = {
+                        'numbers': 0, 'greetings': 0, 'family': 0, 'objects': 0, 
+                        'actions': 0, 'food': 0, 'nature': 0
+                    }
+                    
+                    for gesture_info in labels.values():
+                        name = gesture_info['name'].lower()
+                        if any(num in name for num in ['ek', 'do', 'teen', 'chaar', 'paanch', 'che', 'saat', 'aath', 'nau', 'das']):
+                            categories_found['numbers'] += 1
+                        elif any(greet in name for greet in ['salam', 'shukriya', 'khuda_hafiz']):
+                            categories_found['greetings'] += 1
+                        elif any(fam in name for fam in ['ammi', 'abbu', 'bhai', 'behn']):
+                            categories_found['family'] += 1
+                        elif any(obj in name for obj in ['kitab', 'qalam', 'ghar', 'phone', 'computer']):
+                            categories_found['objects'] += 1
+                        elif any(act in name for act in ['reading', 'writing', 'eating', 'drinking', 'walking']):
+                            categories_found['actions'] += 1
+                        elif any(food in name for food in ['khana', 'paani', 'chai', 'roti', 'aam']):
+                            categories_found['food'] += 1
+                        elif any(nat in name for nat in ['suraj', 'chaand', 'phool', 'darya']):
+                            categories_found['nature'] += 1
+                    
+                    total_categorized = sum(categories_found.values())
+                    
+                    self.log_test("Expanded Gesture Database", True, 
+                                f"Found {gesture_count} gestures with proper structure. Categories: {categories_found}")
+                    return True
+                else:
+                    missing_fields = [f for f in required_fields if f not in sample_gesture]
+                    self.log_test("Expanded Gesture Database", False, f"Missing required fields: {missing_fields}")
+                    return False
+            else:
+                self.log_test("Expanded Gesture Database", False, 
+                            f"Expected ~132 gestures, found only {gesture_count}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Expanded Gesture Database", False, f"Error loading labels: {str(e)}")
+            return False
+    
+    def test_enhanced_speech_recognition(self):
+        """Test Enhanced Speech Recognition with Google API"""
+        try:
+            speech_file = self.sign_app_path / "speech_to_sign.py"
+            if not speech_file.exists():
+                self.log_test("Enhanced Speech Recognition", False, "speech_to_sign.py file not found")
+                return False
+            
+            # Test if the file can be imported
+            spec = importlib.util.spec_from_file_location("speech_to_sign", speech_file)
+            speech_module = importlib.util.module_from_spec(spec)
+            
+            # Mock speech_recognition and other dependencies
+            from unittest.mock import MagicMock
+            sys.modules['speech_recognition'] = MagicMock()
+            sys.modules['pyttsx3'] = MagicMock()
+            sys.modules['cv2'] = MagicMock()
+            
+            spec.loader.exec_module(speech_module)
+            
+            # Test if main classes exist
+            if hasattr(speech_module, 'SpeechToSign'):
+                speech_class = getattr(speech_module, 'SpeechToSign')
+                
+                # Test if PakistaniSignLanguageApp exists
+                if hasattr(speech_module, 'PakistaniSignLanguageApp'):
+                    app_class = getattr(speech_module, 'PakistaniSignLanguageApp')
+                    
+                    # Check for Google API key integration
+                    with open(speech_file, 'r') as f:
+                        content = f.read()
+                        
+                    google_api_features = [
+                        'GOOGLE_SPEECH_API_KEY' in content,
+                        'AIzaSyBRj3kHAgCg6B_rJTWhlMg8zsNHSTy6vnM' in content,
+                        'recognize_google' in content,
+                        'language=' in content
+                    ]
+                    
+                    if sum(google_api_features) >= 3:
+                        self.log_test("Enhanced Speech Recognition", True, 
+                                    "Google Speech API integration found with multi-language support")
+                        return True
+                    else:
+                        self.log_test("Enhanced Speech Recognition", False, 
+                                    f"Missing Google API features. Found: {sum(google_api_features)}/4")
+                        return False
+                else:
+                    self.log_test("Enhanced Speech Recognition", False, "PakistaniSignLanguageApp class not found")
+                    return False
+            else:
+                self.log_test("Enhanced Speech Recognition", False, "SpeechToSign class not found")
+                return False
+                
+        except Exception as e:
+            self.log_test("Enhanced Speech Recognition", False, f"Module import failed: {str(e)}")
+            return False
+    
+    def test_complete_sign_language_app(self):
+        """Test Complete Sign Language App Integration"""
+        try:
+            app_file = self.sign_app_path / "sign_language_app.py"
+            if not app_file.exists():
+                self.log_test("Complete Sign Language App", False, "sign_language_app.py file not found")
+                return False
+            
+            # Read the file content to check for key features
+            with open(app_file, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            # Check for key integration features
+            integration_features = {
+                '3D Character Integration': 'character_3d' in content and 'SignLanguageCharacter' in content,
+                'Speech Recognition': 'speech_recognition' in content or 'SpeechToSign' in content,
+                'Text to Sign': 'text_to_sign' in content or 'find_gesture_for_text' in content,
+                'Gesture Database': 'labels.json' in content,
+                'Multi-language Support': ('urdu' in content.lower() and 'pashto' in content.lower()),
+                'Google API Integration': 'GOOGLE_SPEECH_API_KEY' in content,
+                '132 Gestures': '132' in content or len([line for line in content.split('\n') if 'gesture' in line.lower()]) > 50
+            }
+            
+            passed_features = sum(integration_features.values())
+            total_features = len(integration_features)
+            
+            if passed_features >= 5:  # At least 5 out of 7 features should be present
+                feature_details = [f"{k}: {'✅' if v else '❌'}" for k, v in integration_features.items()]
+                self.log_test("Complete Sign Language App", True, 
+                            f"Integration features ({passed_features}/{total_features}): {', '.join(feature_details)}")
+                return True
+            else:
+                missing_features = [k for k, v in integration_features.items() if not v]
+                self.log_test("Complete Sign Language App", False, 
+                            f"Missing key features: {missing_features}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Complete Sign Language App", False, f"Error reading app file: {str(e)}")
+            return False
+    
+    def test_launcher_system(self):
+        """Test Launcher System"""
+        try:
+            launcher_file = self.sign_app_path / "launcher.py"
+            if not launcher_file.exists():
+                self.log_test("Launcher System", False, "launcher.py file not found")
+                return False
+            
+            # Read the file content
+            with open(launcher_file, 'r') as f:
+                content = f.read()
+            
+            # Check for launcher features
+            launcher_features = {
+                'Dependency Checking': 'check_dependencies' in content,
+                'File Verification': 'check_files' in content,
+                'System Information': 'show_system_info' in content or 'system_info' in content,
+                'Multiple Launch Options': 'sign_language_app.py' in content and 'character_3d.py' in content,
+                'User Interface': 'input(' in content and 'choice' in content,
+                'Error Handling': 'try:' in content and 'except' in content
+            }
+            
+            passed_features = sum(launcher_features.values())
+            total_features = len(launcher_features)
+            
+            if passed_features >= 4:  # At least 4 out of 6 features
+                feature_details = [f"{k}: {'✅' if v else '❌'}" for k, v in launcher_features.items()]
+                self.log_test("Launcher System", True, 
+                            f"Launcher features ({passed_features}/{total_features}): {', '.join(feature_details)}")
+                return True
+            else:
+                missing_features = [k for k, v in launcher_features.items() if not v]
+                self.log_test("Launcher System", False, 
+                            f"Missing launcher features: {missing_features}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Launcher System", False, f"Error reading launcher file: {str(e)}")
+            return False
+    
     def run_all_tests(self):
         """Run all backend API tests"""
         print("=" * 60)
