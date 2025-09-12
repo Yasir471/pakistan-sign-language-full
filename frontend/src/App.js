@@ -356,6 +356,16 @@ const App = () => {
             >
               📝 Text → Sign
             </button>
+            <button
+              onClick={() => setMode('story')}
+              className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+                mode === 'story'
+                  ? 'bg-orange-600 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              📚 Pakistani Story
+            </button>
           </div>
 
           {/* Language Selection */}
