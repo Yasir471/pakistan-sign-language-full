@@ -9,12 +9,14 @@ Real-time Pakistani Sign Language detection and translation system using **YOLOv
 - **Real-time Animation**: Smooth character movements with gesture-specific hand positions
 - **Visual Learning**: Perfect for visual learners who want to see how gestures are performed
 - **Pakistani Cultural Elements**: Character designed with Pakistani cultural representation
+- **Story Integration**: Character tells classic Pakistani stories with sign language demonstrations
 
 ### 🧠 Enhanced AI Features
 - **132 Pakistani Gestures**: Comprehensive gesture dataset covering daily conversation needs
 - **Google Speech API Integration**: Advanced speech recognition for Urdu, Pashto, and English
 - **YOLOv5 Real-time Detection**: Fast and accurate hand gesture recognition
 - **Bidirectional Translation**: Sign ↔ Speech ↔ Text with 3D demonstrations
+- **Interactive Storytelling**: Learn sign language through classic tales like "انگور تو کھٹے ہیں"
 
 ## 🚀 Quick Start
 
