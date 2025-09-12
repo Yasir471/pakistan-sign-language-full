@@ -2,6 +2,7 @@
 """
 Comprehensive Backend API Testing for Sign Language Translation System
 Tests all core API endpoints with realistic Pakistani sign language data
+PLUS testing for new 3D Character Sign Language App components
 """
 
 import requests
@@ -11,6 +12,10 @@ import uuid
 import time
 from datetime import datetime
 import os
+import sys
+import subprocess
+import importlib.util
+from pathlib import Path
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -21,6 +26,7 @@ BACKEND_URL = os.getenv('REACT_APP_BACKEND_URL', 'http://localhost:8001')
 API_BASE = f"{BACKEND_URL}/api"
 
 print(f"Testing backend at: {API_BASE}")
+print(f"Testing sign_app components at: /app/sign_app/")
 
 class BackendTester:
     def __init__(self):
