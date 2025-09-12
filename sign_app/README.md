@@ -68,7 +68,18 @@ python speech_to_sign.py
 - Shows 3D animated character demonstrating the gesture
 - Provides audio feedback
 
-### 4. 🎭 3D Character Demo Only
+### 5. 📚 Pakistani Story Mode
+
+```bash
+python pakistani_story.py
+```
+
+**What it does:**
+- Interactive storytelling with 3D character
+- Classic tale: "The Sour Grapes" (انگور تو کھٹے ہیں / انګور خو تروې دي)
+- Available in Urdu, Pashto, and English
+- Character demonstrates story-related gestures
+- Educational moral lessons with sign language
 
 ```bash
 python character_3d.py
