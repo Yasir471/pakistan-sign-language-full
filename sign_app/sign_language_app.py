@@ -142,46 +142,70 @@ class PakistaniSignLanguageApp:
         print(f"📷 Created sample image: {image_path}")
     
     def speech_to_sign(self):
-        """Convert speech input to sign language gestures"""
+        """Convert speech input to sign language gestures with 3D character"""
         if not self.microphone:
             print("❌ Microphone not available for speech recognition")
-            return
+            print("💡 Switching to text input mode...")
+            return self.text_to_sign()
             
         print("🎤 Speech to Sign Language Mode")
         print("🗣️ Speak words in Urdu, Pashto, or English")
         print("🤟 The 3D character will demonstrate the gestures")
+        print("🔊 Your speech will be converted to text and then to sign language")
         print("❌ Press Ctrl+C to return to main menu")
         
         try:
             while True:
                 print("\n" + "="*60)
-                print("🎤 Listening... (speak now)")
+                print("🎯 Choose input method:")
+                print("1. 🎤 Voice Input (Microphone)")
+                print("2. ✏️  Text Input (Fallback)")
+                print("3. 🔙 Return to Main Menu")
                 
-                recognized_text = self.listen_for_speech()
+                choice = input("👉 Enter choice (1-3): ").strip()
                 
-                if recognized_text:
-                    print(f"🔤 You said: '{recognized_text}'")
+                if choice == '1':
+                    # Voice input
+                    print("\n🎤 Voice Input Mode Active")
+                    print("🗣️ Speak clearly into the microphone...")
                     
-                    # Find matching gesture
-                    gesture_info = self.find_gesture_for_text(recognized_text)
-                    
-                    if gesture_info:
-                        print(f"✅ Found gesture: {gesture_info['name']}")
-                        self.display_gesture_with_character(gesture_info)
-                    else:
-                        print("❌ Sorry, no gesture found for that speech")
-                        print("💡 Try saying: hello, thank you, water, food, help, one, two, three")
+                    for i in range(3):  # Try 3 times
+                        print(f"\n🎯 Attempt {i+1}/3")
                         
-                        if self.tts:
-                            self.tts.say("Sorry, no matching gesture found. Try different words.")
-                            self.tts.runAndWait()
+                        recognized_text = self.listen_for_speech()
+                        
+                        if recognized_text:
+                            print(f"✅ You said: '{recognized_text}'")
+                            
+                            # Find matching gesture
+                            gesture_info = self.find_gesture_for_text(recognized_text)
+                            
+                            if gesture_info:
+                                print(f"✅ Found gesture: {gesture_info['name']}")
+                                self.display_gesture_with_character_and_speech(gesture_info, recognized_text)
+                                break
+                            else:
+                                print("❌ Sorry, no gesture found for that speech")
+                                print("💡 Try saying: hello, thank you, water, food, help, one, two, three")
+                        else:
+                            print("🔄 No speech recognized. Please try again.")
+                    else:
+                        print("⚠️ Voice recognition failed after 3 attempts.")
+                        
+                elif choice == '2':
+                    # Text input fallback
+                    return self.text_to_sign()
+                elif choice == '3':
+                    break
                 else:
-                    print("🔄 No speech recognized. Please try again.")
-                
-                time.sleep(0.5)  # Brief pause before next iteration
-                
+                    print("❌ Invalid choice. Please enter 1-3.")
+                    
         except KeyboardInterrupt:
             print("\n🔙 Returning to main menu...")
+        except Exception as e:
+            print(f"❌ Unexpected error: {e}")
+            print("💡 Switching to text mode...")
+            self.text_to_sign()
     
     def text_to_sign(self):
         """Convert text input to sign language gestures with 3D character and speech"""
