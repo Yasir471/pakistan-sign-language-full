@@ -298,7 +298,7 @@ class RealGestureRecognitionService:
                 "pashto_text": "لاس نه لیدل کیږي",
                 "meaning": "No hand detected",
                 "landmarks_detected": False,
-                "detection_method": "MediaPipe + CV"
+                "detection_method": "YOLOv5 + Hand Tracking"
             }
             
         except Exception as e:
