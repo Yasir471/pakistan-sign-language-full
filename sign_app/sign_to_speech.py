@@ -225,7 +225,7 @@ def main():
     print("=" * 60)
     print("🤟 PAKISTANI SIGN LANGUAGE TO SPEECH DETECTOR")
     print("=" * 60)
-    print("🧠 AI: YOLOv5 + Computer Vision")
+    print("🧠 Technology: YOLOv5 + Speech Recognition")
     print("🇵🇰 Languages: Urdu, Pashto, English")
     print("📹 Input: Real-time camera feed")
     print("🔊 Output: Text-to-speech")
