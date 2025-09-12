@@ -557,7 +557,7 @@ const App = () => {
 
             {/* Performance Stats */}
             <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-lg font-bold mb-4">⚡ AI Performance</h3>
+              <h3 className="text-lg font-bold mb-4">⚡ Technology Performance</h3>
               <div className="space-y-3">
                 {stats && (
                   <>
