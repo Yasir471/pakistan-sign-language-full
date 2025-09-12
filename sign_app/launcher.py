@@ -195,7 +195,7 @@ def show_system_info():
     print(f"\n📂 Project Files:")
     project_files = [
         'sign_language_app.py', 'character_3d.py', 'sign_to_speech.py',
-        'speech_to_sign.py', 'labels.json', 'best.pt', '.env'
+        'speech_to_sign.py', 'pakistani_story.py', 'labels.json', 'best.pt', '.env'
     ]
     
     for file_name in project_files:
