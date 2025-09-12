@@ -16,7 +16,7 @@ def print_header():
     print("=" * 80)
     print("🤟 132 Pakistani Sign Language Gestures")
     print("🎭 Interactive 3D Animated Character")
-    print("🧠 AI-Powered: YOLOv5 + Google Speech API")
+    print("🧠 Technology: YOLOv5 + Google Speech API")
     print("🌐 Languages: Urdu, Pashto, English")
     print("=" * 80)
 
