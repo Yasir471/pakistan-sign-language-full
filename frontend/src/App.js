@@ -172,6 +172,34 @@ const App = () => {
     }
   };
 
+  const handleStoryMode = async (storyLanguage) => {
+    setIsProcessing(true);
+    setError('');
+    setResult(null);
+
+    try {
+      // Simulate story mode processing
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      setResult({
+        type: 'story',
+        language: storyLanguage,
+        story: {
+          title: storyLanguage === 'urdu' ? 'انگور تو کھٹے ہیں' : 
+                 storyLanguage === 'pashto' ? 'انګور خو تروې دي' : 'The Sour Grapes',
+          message: `🎭 3D Character story demonstration started in ${storyLanguage}! 
+                   The animated character is now telling the classic Pakistani story with sign language gestures.
+                   Watch as each story element is demonstrated through Pakistani sign language.`,
+          instructions: '3D character window should now be open showing the interactive story with gesture demonstrations.'
+        }
+      });
+    } catch (error) {
+      setError('Story mode failed to start. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const renderResult = () => {
     if (!result) return null;
 
