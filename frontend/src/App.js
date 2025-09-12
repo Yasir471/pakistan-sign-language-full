@@ -7,7 +7,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const App = () => {
-  const [mode, setMode] = useState('sign-to-speech'); // 'sign-to-speech' or 'speech-to-sign'
+  const [mode, setMode] = useState('sign-to-speech'); // 'sign-to-speech', 'speech-to-sign', 'text-to-sign', or 'story'
   const [language, setLanguage] = useState('urdu');
   const [isProcessing, setIsProcessing] = useState(false);
   const [result, setResult] = useState(null);
