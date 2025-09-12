@@ -60,6 +60,7 @@ def check_files():
         'character_3d.py', 
         'sign_to_speech.py',
         'speech_to_sign.py',
+        'pakistani_story.py',
         'labels.json',
         'best.pt',
         '.env'
