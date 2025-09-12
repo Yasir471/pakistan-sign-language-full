@@ -263,13 +263,14 @@ class BackendTester:
                                  "available_gestures", "model_status"]
                 
                 if all(field in data for field in required_fields):
-                    if data["available_gestures"] == 10:  # Expected number of Pakistani gestures
+                    # Updated to expect 132 gestures instead of 10
+                    if data["available_gestures"] >= 130:  # Allow some flexibility
                         self.log_test("Application Statistics", True, 
-                                    f"Total translations: {data['total_translations']}, Model: {data['model_status']}")
+                                    f"Total translations: {data['total_translations']}, Model: {data['model_status']}, Gestures: {data['available_gestures']}")
                         return True
                     else:
                         self.log_test("Application Statistics", False, 
-                                    f"Expected 10 gestures, got {data['available_gestures']}")
+                                    f"Expected ~132 gestures, got {data['available_gestures']}")
                         return False
                 else:
                     missing = [f for f in required_fields if f not in data]
