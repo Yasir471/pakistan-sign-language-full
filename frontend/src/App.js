@@ -323,6 +323,36 @@ const App = () => {
           </div>
         );
 
+      case 'story':
+        const story = result.story;
+        return (
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h3 className="text-xl font-bold mb-4 text-orange-600">🎭 Pakistani Story Mode</h3>
+            <div className="space-y-4">
+              <div className="bg-gradient-to-r from-orange-100 to-amber-100 p-4 rounded-lg">
+                <h4 className="text-lg font-bold mb-2">{story.title}</h4>
+                <p className="text-sm text-gray-700 mb-3">Language: {result.language}</p>
+                <div className="bg-white p-3 rounded-lg">
+                  <p className="text-gray-800">{story.message}</p>
+                </div>
+              </div>
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h5 className="font-semibold text-blue-800 mb-2">📋 Instructions:</h5>
+                <p className="text-sm text-blue-700">{story.instructions}</p>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg">
+                <h5 className="font-semibold text-green-800 mb-2">✨ Story Features:</h5>
+                <ul className="text-sm text-green-700 space-y-1">
+                  <li>• 3D animated character with Pakistani sign language gestures</li>
+                  <li>• Interactive storytelling with moral lessons</li>
+                  <li>• Cultural context and traditional Pakistani tales</li>
+                  <li>• Educational sign language vocabulary building</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        );
+
       default:
         return null;
     }
