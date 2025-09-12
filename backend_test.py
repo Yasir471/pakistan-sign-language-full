@@ -32,6 +32,7 @@ class BackendTester:
     def __init__(self):
         self.session_id = str(uuid.uuid4())
         self.test_results = {}
+        self.sign_app_path = Path("/app/sign_app")
         
     def log_test(self, test_name, success, details=""):
         """Log test results"""
