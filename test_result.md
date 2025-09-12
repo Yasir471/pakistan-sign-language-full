@@ -360,10 +360,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Real-time Camera Interface"
-    - "Mode Selection UI (Sign↔Speech)"
-    - "Language Selection (Urdu/Pashto)"
-    - "Real-time Results Display"
+    - "3D Character Animation System"
+    - "Complete Sign Language App"
+    - "Enhanced Speech Recognition"
+    - "Expanded Gesture Database"
+    - "Launcher System"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
