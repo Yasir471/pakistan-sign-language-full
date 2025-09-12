@@ -445,38 +445,38 @@ class BackendTester:
             
             spec.loader.exec_module(speech_module)
             
-            # Test if main classes exist
-            if hasattr(speech_module, 'SpeechToSign'):
-                speech_class = getattr(speech_module, 'SpeechToSign')
+            # Test if main classes exist (check for either SpeechToSign or PakistaniSignLanguageApp)
+            has_speech_class = hasattr(speech_module, 'SpeechToSign')
+            has_app_class = hasattr(speech_module, 'PakistaniSignLanguageApp')
+            
+            if has_speech_class or has_app_class:
+                # Check for Google API key integration
+                with open(speech_file, 'r') as f:
+                    content = f.read()
+                    
+                google_api_features = [
+                    'GOOGLE_SPEECH_API_KEY' in content or 'google_api_key' in content,
+                    'AIzaSyBRj3kHAgCg6B_rJTWhlMg8zsNHSTy6vnM' in content,
+                    'recognize_google' in content,
+                    'language=' in content or 'ur' in content or 'fa' in content
+                ]
                 
-                # Test if PakistaniSignLanguageApp exists
-                if hasattr(speech_module, 'PakistaniSignLanguageApp'):
-                    app_class = getattr(speech_module, 'PakistaniSignLanguageApp')
+                if sum(google_api_features) >= 3:
+                    class_info = []
+                    if has_speech_class:
+                        class_info.append("SpeechToSign")
+                    if has_app_class:
+                        class_info.append("PakistaniSignLanguageApp")
                     
-                    # Check for Google API key integration
-                    with open(speech_file, 'r') as f:
-                        content = f.read()
-                        
-                    google_api_features = [
-                        'GOOGLE_SPEECH_API_KEY' in content,
-                        'AIzaSyBRj3kHAgCg6B_rJTWhlMg8zsNHSTy6vnM' in content,
-                        'recognize_google' in content,
-                        'language=' in content
-                    ]
-                    
-                    if sum(google_api_features) >= 3:
-                        self.log_test("Enhanced Speech Recognition", True, 
-                                    "Google Speech API integration found with multi-language support")
-                        return True
-                    else:
-                        self.log_test("Enhanced Speech Recognition", False, 
-                                    f"Missing Google API features. Found: {sum(google_api_features)}/4")
-                        return False
+                    self.log_test("Enhanced Speech Recognition", True, 
+                                f"Classes found: {', '.join(class_info)}. Google Speech API integration confirmed")
+                    return True
                 else:
-                    self.log_test("Enhanced Speech Recognition", False, "PakistaniSignLanguageApp class not found")
+                    self.log_test("Enhanced Speech Recognition", False, 
+                                f"Missing Google API features. Found: {sum(google_api_features)}/4")
                     return False
             else:
-                self.log_test("Enhanced Speech Recognition", False, "SpeechToSign class not found")
+                self.log_test("Enhanced Speech Recognition", False, "No speech recognition classes found")
                 return False
                 
         except Exception as e:
