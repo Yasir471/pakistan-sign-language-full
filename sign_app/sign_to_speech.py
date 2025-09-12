@@ -36,14 +36,7 @@ class SignToSpeech:
             exit(1)
         
         # Load gesture labels
-        try:
-            with open(labels_path, 'r', encoding='utf-8') as f:
-                self.labels = json.load(f)
-            print(f"✅ Loaded {len(self.labels)} gesture labels")
-        except Exception as e:
-            print(f"❌ Error loading labels: {e}")
-            # Create default labels if file doesn't exist
-            self.create_default_labels()
+        self.load_labels()
         
         # Initialize text-to-speech engine
         try:
