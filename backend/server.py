@@ -609,7 +609,7 @@ async def detect_gesture(request: GestureDetectionRequest):
             "success": True,
             "detection": result,
             "session_id": request.session_id,
-            "processing_method": "MediaPipe + Computer Vision"
+            "processing_method": "YOLOv5 + Hand Tracking"
         }
         
     except Exception as e:
