@@ -438,7 +438,7 @@ def main():
     print("=" * 60)
     print("🎤 PAKISTANI SPEECH TO SIGN LANGUAGE CONVERTER")
     print("=" * 60)
-    print("🧠 AI: Speech Recognition + Computer Vision")
+    print("🧠 Technology: Speech Recognition + 3D Animation")
     print("🇵🇰 Languages: Urdu, Pashto, English")
     print("🎤 Input: Voice/Speech")
     print("🤟 Output: Hand gesture demonstrations")
