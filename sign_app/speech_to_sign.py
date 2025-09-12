@@ -39,13 +39,18 @@ class SpeechToSign:
         
         # Initialize speech recognizer
         self.recognizer = sr.Recognizer()
-        self.microphone = sr.Microphone()
-        
-        # Adjust for ambient noise
-        print("🔧 Calibrating microphone for ambient noise...")
-        with self.microphone as source:
-            self.recognizer.adjust_for_ambient_noise(source, duration=2)
-        print("✅ Microphone calibrated")
+        try:
+            self.microphone = sr.Microphone()
+            
+            # Test microphone availability
+            print("🔧 Testing microphone...")
+            with self.microphone as source:
+                self.recognizer.adjust_for_ambient_noise(source, duration=1)
+            print("✅ Microphone working correctly")
+        except Exception as e:
+            print(f"⚠️ Microphone issue: {e}")
+            print("💡 Microphone may not be available - text mode will work")
+            self.microphone = None
         
         # Initialize TTS for feedback
         try:
