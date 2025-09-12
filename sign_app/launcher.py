@@ -145,7 +145,7 @@ def main():
     
     while True:
         try:
-            choice = input("\n👉 Enter your choice (1-6): ").strip()
+            choice = input("\n👉 Enter your choice (1-7): ").strip()
             
             if choice == '1':
                 print("\n🎭 Launching complete app with 3D character...")
@@ -164,13 +164,17 @@ def main():
                 subprocess.run([sys.executable, 'character_3d.py'])
                 break
             elif choice == '5':
-                show_system_info()
+                print("\n📚 Launching Pakistani story mode...")
+                subprocess.run([sys.executable, 'pakistani_story.py'])
+                break
             elif choice == '6':
+                show_system_info()
+            elif choice == '7':
                 print("\n👋 Thank you for using Pakistani Sign Language App!")
                 print("🇵🇰 Goodbye! خدا حافظ! خدای پامان!")
                 break
             else:
-                print("❌ Invalid choice. Please enter 1-6.")
+                print("❌ Invalid choice. Please enter 1-7.")
                 
         except KeyboardInterrupt:
             print("\n\n👋 Application terminated by user")
