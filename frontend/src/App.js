@@ -563,7 +563,7 @@ const App = () => {
                   <>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Technology Engine</span>
-                      <span className="font-semibold text-green-600">{stats.ai_engine}</span>
+                      <span className="font-semibold text-green-600">{stats.technology_engine}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Detection Method</span>
