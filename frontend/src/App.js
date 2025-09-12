@@ -308,7 +308,7 @@ const App = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">🤟 SignSpeak</h1>
-              <p className="text-gray-600 mt-1">Pakistani Sign Language Translation - MediaPipe + AI Powered</p>
+              <p className="text-gray-600 mt-1">Pakistani Sign Language Translation - YOLOv5 + Speech Recognition</p>
             </div>
             {stats && (
               <div className="text-right">
