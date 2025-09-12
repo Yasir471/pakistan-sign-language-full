@@ -135,8 +135,13 @@ def main():
     print("   - Shows various Pakistani gestures")
     print("   - No microphone or camera needed")
     print()
-    print("5. ❓ System Information")
-    print("6. ❌ Exit")
+    print("5. 📚 Pakistani Story Mode")
+    print("   - Interactive storytelling with 3D character")
+    print("   - Classic tale: 'The Sour Grapes' (انگور تو کھٹے ہیں)")
+    print("   - Learn sign language through stories")
+    print()
+    print("6. ❓ System Information")
+    print("7. ❌ Exit")
     
     while True:
         try:
