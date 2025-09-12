@@ -221,11 +221,20 @@ def show_system_info():
     
     # Environment info
     print(f"\n🌍 Environment:")
-    google_key = os.getenv('GOOGLE_SPEECH_API_KEY')
-    if google_key:
-        print(f"   ✅ Google Speech API Key: {google_key[:10]}...{google_key[-5:]}")
-    else:
-        print(f"   ⚠️ Google Speech API Key: not found in .env")
+    
+    # Load .env file if it exists
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+        google_key = os.getenv('GOOGLE_SPEECH_API_KEY')
+        if google_key:
+            print(f"   ✅ Google Speech API Key: {google_key[:10]}...{google_key[-5:]}")
+        else:
+            print(f"   ⚠️ Google Speech API Key: not found in environment")
+    except ImportError:
+        print(f"   ⚠️ python-dotenv not available, manually check .env file")
+    except Exception as e:
+        print(f"   ⚠️ Environment check failed: {e}")
     
     print("="*60)
 
