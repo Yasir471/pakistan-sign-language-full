@@ -516,6 +516,68 @@ const App = () => {
               </div>
             )}
 
+            {/* Story Mode */}
+            {mode === 'story' && (
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                <h2 className="text-xl font-bold mb-4">📚 Pakistani Story: انگور تو کھٹے ہیں</h2>
+                <div className="space-y-4">
+                  <div className="bg-gradient-to-r from-orange-100 to-amber-100 p-4 rounded-lg">
+                    <h3 className="font-bold text-lg mb-2">🦊 The Sour Grapes (انگور تو کھٹے ہیں)</h3>
+                    <p className="text-sm text-gray-700 mb-3">Classic Pakistani story with 3D sign language character demonstrations</p>
+                    
+                    <div className="space-y-2 mb-4">
+                      <p className="text-sm">🇵🇰 <strong>Urdu:</strong> انگور تو کھٹے ہیں</p>
+                      <p className="text-sm">🇦🇫 <strong>Pashto:</strong> انګور خو تروې دي</p>
+                      <p className="text-sm">🏴󠁧󠁢󠁥󠁮󠁧󠁿 <strong>English:</strong> The Sour Grapes</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <button
+                        onClick={() => handleStoryMode('urdu')}
+                        disabled={isProcessing}
+                        className="bg-green-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm"
+                      >
+                        🇵🇰 Urdu Story with 3D Character
+                      </button>
+                      <button
+                        onClick={() => handleStoryMode('pashto')}
+                        disabled={isProcessing}
+                        className="bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm"
+                      >
+                        🇦🇫 Pashto Story with 3D Character
+                      </button>
+                      <button
+                        onClick={() => handleStoryMode('english')}
+                        disabled={isProcessing}
+                        className="bg-purple-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm"
+                      >
+                        🏴󠁧󠁢󠁥󠁮󠁧󠁿 English Story with 3D Character
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+                    <h4 className="font-bold text-sm mb-2">🎭 Story Features:</h4>
+                    <ul className="text-sm space-y-1 text-gray-700">
+                      <li>• Interactive 3D animated character demonstrates story gestures</li>
+                      <li>• Learn Pakistani sign language through classic tales</li>
+                      <li>• Available in Urdu, Pashto, and English languages</li>
+                      <li>• Educational moral lessons with sign language integration</li>
+                      <li>• Story-related gesture vocabulary building</li>
+                    </ul>
+                  </div>
+
+                  {isProcessing && (
+                    <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg text-center">
+                      <div className="animate-spin inline-block w-6 h-6 border-4 border-orange-600 border-t-transparent rounded-full mb-2"></div>
+                      <p className="text-orange-800 font-medium">🎭 Starting 3D character story demonstration...</p>
+                      <p className="text-sm text-orange-600">The animated character will now tell the Pakistani story with sign language gestures!</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Error Display */}
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 mt-6">
