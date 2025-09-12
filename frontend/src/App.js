@@ -575,10 +575,7 @@ const App = () => {
                         {stats.model_status === 'loaded' ? '✅ Loaded' : '❌ Not Loaded'}
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Session ID</span>
-                      <span className="font-mono text-xs">{sessionId}</span>
-                    </div>
+
                   </>
                 )}
               </div>
