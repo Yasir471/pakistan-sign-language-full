@@ -374,12 +374,7 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus:
-    - "3D Character Animation System"
-    - "Complete Sign Language App"
-    - "Enhanced Speech Recognition"
-    - "Expanded Gesture Database"
-    - "Launcher System"
+  current_focus: []
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
