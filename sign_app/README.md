@@ -438,6 +438,12 @@ python speech_to_sign.py
 
 # 3D character demo only
 python character_3d.py
+
+# Pakistani story mode with 3D character
+python pakistani_story.py
+
+# System launcher (choose any option)
+python launcher.py
 ```
 
-**🎭 Experience the magic of 3D sign language learning! 🤟**
+**🎭 Experience the magic of 3D sign language learning with Pakistani storytelling! 🤟**
