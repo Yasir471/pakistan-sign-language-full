@@ -403,7 +403,7 @@ const App = () => {
                       <div className="text-white text-center">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
                         <p>🔍 Analyzing hand movement...</p>
-                        <p className="text-sm mt-1">MediaPipe AI Processing</p>
+                        <p className="text-sm mt-1">YOLOv5 Processing</p>
                       </div>
                     </div>
                   )}
