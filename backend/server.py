@@ -567,7 +567,7 @@ class TranslationHistory(BaseModel):
 # API Routes
 @api_router.get("/")
 async def root():
-    return {"message": "Real Sign Language Translation API - MediaPipe Powered!", "version": "2.0"}
+    return {"message": "Pakistani Sign Language Translation API - YOLOv5 Powered!", "version": "2.0"}
 
 @api_router.get("/gestures")
 async def get_available_gestures():
