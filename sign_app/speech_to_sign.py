@@ -322,7 +322,7 @@ class SpeechToSign:
         return None
     
     def display_gesture(self, gesture_info):
-        """Display the gesture image and information"""
+        """Display the gesture with 3D animated character"""
         print("=" * 50)
         print(f"🤟 GESTURE: {gesture_info['name'].upper()}")
         print(f"🏴󠁧󠁢󠁥󠁮󠁧󠁿 English: {gesture_info['english']}")
@@ -330,35 +330,55 @@ class SpeechToSign:
         print(f"🇦🇫 Pashto: {gesture_info['pashto']}")
         print("=" * 50)
         
-        # Load and display gesture image
-        image_path = self.images_path / f"{gesture_info['name']}.jpg"
-        
-        if image_path.exists():
-            try:
-                img = cv2.imread(str(image_path))
-                if img is not None:
-                    # Resize for display
-                    img = cv2.resize(img, (600, 450))
-                    
-                    # Add text overlays
-                    cv2.putText(img, f"Gesture: {gesture_info['name']}", (20, 30), 
-                              cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-                    cv2.putText(img, f"English: {gesture_info['english']}", (20, 70), 
-                              cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 2)
-                    cv2.putText(img, "Press any key to continue", (20, 420), 
-                              cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
-                    
-                    cv2.imshow(f"Pakistani Sign Language - {gesture_info['name']}", img)
-                    cv2.waitKey(0)  # Wait for key press
-                    cv2.destroyAllWindows()
-                    
-            except Exception as e:
-                print(f"❌ Error displaying image: {e}")
+        # Import and create 3D character
+        try:
+            from character_3d import SignLanguageCharacter
+            
+            print("🎭 Starting 3D character animation...")
+            character = SignLanguageCharacter()
+            
+            # Animate the gesture
+            success = character.run_animation_loop(gesture_info['name'], duration=4.0)
+            character.cleanup()
+            
+            if success:
+                print("✅ 3D animation completed successfully!")
+            else:
+                print("⚠️ 3D animation interrupted by user")
+                
+        except Exception as e:
+            print(f"⚠️ Could not display 3D character: {e}")
+            print("📱 Falling back to image display...")
+            
+            # Fallback to image display
+            image_path = self.images_path / f"{gesture_info['name']}.jpg"
+            
+            if image_path.exists():
+                try:
+                    img = cv2.imread(str(image_path))
+                    if img is not None:
+                        # Resize for display
+                        img = cv2.resize(img, (600, 450))
+                        
+                        # Add text overlays
+                        cv2.putText(img, f"Gesture: {gesture_info['name']}", (20, 30), 
+                                  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                        cv2.putText(img, f"English: {gesture_info['english']}", (20, 70), 
+                                  cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 2)
+                        cv2.putText(img, "Press any key to continue", (20, 420), 
+                                  cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+                        
+                        cv2.imshow(f"Pakistani Sign Language - {gesture_info['name']}", img)
+                        cv2.waitKey(0)  # Wait for key press
+                        cv2.destroyAllWindows()
+                        
+                except Exception as e:
+                    print(f"❌ Error displaying image: {e}")
         
         # Provide TTS feedback
         if self.tts:
             try:
-                feedback = f"Gesture for {gesture_info['english']}. Please show this sign."
+                feedback = f"Gesture for {gesture_info['english']}. The animated character showed how to sign this."
                 self.tts.say(feedback)
                 self.tts.runAndWait()
             except:
