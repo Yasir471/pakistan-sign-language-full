@@ -464,7 +464,7 @@ const App = () => {
                   <p className="text-gray-600 mb-6">
                     Click to start recording speech in {language === 'urdu' ? 'Urdu' : 'Pashto'}
                     <br />
-                    <span className="text-sm text-blue-600">(Demo mode - using enhanced mock speech recognition)</span>
+
                   </p>
                   
                   <button
