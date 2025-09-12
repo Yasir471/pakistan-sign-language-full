@@ -184,10 +184,11 @@ class PakistaniSignLanguageApp:
             print("\n🔙 Returning to main menu...")
     
     def text_to_sign(self):
-        """Convert text input to sign language gestures"""
+        """Convert text input to sign language gestures with 3D character and speech"""
         print("✏️ Text to Sign Language Mode")
         print("📝 Type words in Urdu, Pashto, or English")
         print("🤟 The 3D character will demonstrate the gestures")
+        print("🔊 Text will also be converted to speech")
         print("❌ Type 'quit' or 'exit' to return to main menu")
         
         while True:
@@ -202,25 +203,75 @@ class PakistaniSignLanguageApp:
                 if not text_input:
                     continue
                 
-                print(f"🔤 Processing: '{text_input}'")
+                print(f"🔤 Processing text: '{text_input}'")
                 
                 # Find matching gesture
                 gesture_info = self.find_gesture_for_text(text_input)
                 
                 if gesture_info:
                     print(f"✅ Found gesture: {gesture_info['name']}")
-                    self.display_gesture_with_character(gesture_info)
+                    
+                    # Display gesture with 3D character and speech
+                    self.display_gesture_with_character_and_speech(gesture_info, text_input)
                 else:
                     print("❌ Sorry, no gesture found for that text")
                     print("💡 Try typing: hello, thank you, water, food, help, one, two, three")
                     
+                    # Still provide speech output for the text
                     if self.tts:
-                        self.tts.say("Sorry, no matching gesture found. Try different words.")
-                        self.tts.runAndWait()
+                        try:
+                            self.tts.say(f"No gesture found for: {text_input}")
+                            self.tts.runAndWait()
+                        except:
+                            pass
                         
             except KeyboardInterrupt:
                 print("\n🔙 Returning to main menu...")
                 break
+                
+    def display_gesture_with_character_and_speech(self, gesture_info, original_text):
+        """Display gesture with 3D character and provide speech output"""
+        print("=" * 50)
+        print(f"🤟 GESTURE: {gesture_info['name'].upper()}")
+        print(f"🏴󠁧󠁢󠁥󠁮󠁧󠁿 English: {gesture_info['english']}")
+        print(f"🇵🇰 Urdu: {gesture_info['urdu']}")
+        print(f"🇦🇫 Pashto: {gesture_info['pashto']}")
+        print(f"📝 Your text: '{original_text}'")
+        print("=" * 50)
+        
+        # Provide speech output first
+        if self.tts:
+            try:
+                speech_text = f"Converting text '{original_text}' to sign language. This gesture means {gesture_info['english']}. In Urdu: {gesture_info['urdu']}. In Pashto: {gesture_info['pashto']}"
+                print("🔊 Speaking gesture information...")
+                self.tts.say(speech_text)
+                self.tts.runAndWait()
+            except Exception as e:
+                print(f"⚠️ Speech output error: {e}")
+        
+        # Display 3D character animation
+        try:
+            from character_3d import SignLanguageCharacter
+            
+            print("🎭 Starting 3D character animation...")
+            print("🎮 Watch the animated character demonstrate the gesture!")
+            
+            character = SignLanguageCharacter(width=900, height=700)
+            
+            # Animate the gesture
+            success = character.run_animation_loop(gesture_info['name'], duration=5.0)
+            character.cleanup()
+            
+            if success:
+                print("✅ 3D animation completed successfully!")
+            else:
+                print("⚠️ 3D animation was closed by user")
+                
+        except Exception as e:
+            print(f"⚠️ Could not display 3D character: {e}")
+            print("📱 The 3D character feature requires a display")
+            
+        print("✅ Text-to-Sign conversion completed!")
     
     def listen_for_speech(self):
         """Listen for speech input using Google Speech API"""
