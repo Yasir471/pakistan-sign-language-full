@@ -82,7 +82,7 @@ const App = () => {
               urdu: detection.urdu_text,
               pashto: detection.pashto_text,
               meaning: detection.meaning,
-              detection_method: detection.detection_method || "MediaPipe + CV",
+              detection_method: detection.detection_method || "YOLOv5 + Hand Tracking",
               landmarks_detected: detection.landmarks_detected || false
             },
             ...prev.slice(0, 4) // Keep last 5 detections
