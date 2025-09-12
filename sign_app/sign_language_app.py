@@ -409,7 +409,8 @@ class PakistaniSignLanguageApp:
                 print("2. ✏️  Text to Sign Language (with 3D character)")
                 print("3. 📋 Show Available Gestures")
                 print("4. 🎭 Demo 3D Character")
-                print("5. ❌ Exit")
+                print("5. 📚 Pakistani Story Mode (انگور تو کھٹے ہیں)")
+                print("6. ❌ Exit")
                 
                 choice = input("\n👉 Enter your choice (1-5): ").strip()
                 
