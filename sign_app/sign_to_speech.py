@@ -58,8 +58,38 @@ class SignToSpeech:
         self.detection_cooldown = 2.0  # seconds
         self.speaking = False
     
-    def create_default_labels(self):
-        """Create default Pakistani Sign Language labels"""
+    def load_labels(self):
+        """Load gesture labels from file"""
+        try:
+            with open("labels.json", 'r', encoding='utf-8') as f:
+                self.labels = json.load(f)
+            print(f"✅ Loaded {len(self.labels)} gesture labels from labels.json")
+            return
+        except FileNotFoundError:
+            print("⚠️ labels.json not found, creating default labels...")
+        except json.JSONDecodeError:
+            print("⚠️ Invalid labels.json format, creating default labels...")
+        
+        # Create expanded default labels matching our 132 gesture database
+        self.labels = {}
+        
+        # Load from the main labels.json if available
+        main_labels_path = Path("labels.json")
+        if main_labels_path.exists():
+            try:
+                with open(main_labels_path, 'r', encoding='utf-8') as f:
+                    full_labels = json.load(f)
+                
+                # Convert to the expected format for detection
+                for i, (key, gesture_info) in enumerate(full_labels.items()):
+                    self.labels[i] = gesture_info
+                
+                print(f"✅ Loaded {len(self.labels)} gestures from main database")
+                return
+            except Exception as e:
+                print(f"⚠️ Error loading main labels: {e}")
+        
+        # Fallback to basic gestures
         self.labels = {
             0: {"name": "salam", "urdu": "سلام", "pashto": "سلام ورور", "english": "Hello"},
             1: {"name": "shukriya", "urdu": "شکریہ", "pashto": "مننه", "english": "Thank you"},
@@ -73,10 +103,7 @@ class SignToSpeech:
             9: {"name": "ghar", "urdu": "گھر", "pashto": "کور", "english": "Home"}
         }
         
-        # Save default labels
-        with open("labels.json", 'w', encoding='utf-8') as f:
-            json.dump(self.labels, f, ensure_ascii=False, indent=2)
-        print("📝 Created default labels.json file")
+        print(f"📝 Using {len(self.labels)} default gestures")
     
     def detect_gesture(self, frame):
         """Detect gesture in frame using hand tracking simulation"""
