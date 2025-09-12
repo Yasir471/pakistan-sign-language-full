@@ -42,6 +42,7 @@ python sign_language_app.py
 - ✏️ **Text to Sign**: Type text → 3D character demonstrates gesture  
 - 📋 **Browse Gestures**: View all 132 available Pakistani gestures
 - 🎭 **Character Demo**: Watch character demonstrate various gestures
+- 📚 **Pakistani Story Mode**: Learn through interactive storytelling (انگور تو کھٹے ہیں)
 
 ### 2. 📹 Real-time Sign Detection
 
