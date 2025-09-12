@@ -423,7 +423,7 @@ class PakistaniSignLanguageApp:
                 elif choice == '4':
                     self.demo_character()
                 elif choice == '5':
-                    self.pakistani_story_mode()
+                    self.run_story_mode()
                 elif choice == '6':
                     print("👋 Thank you for using Pakistani Sign Language App!")
                     print("🇵🇰 Goodbye! خدا حافظ! خدای پامان!")
