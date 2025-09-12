@@ -474,6 +474,128 @@ class PakistaniSignLanguageApp:
             
         except Exception as e:
             print(f"❌ Could not run character demo: {e}")
+    
+    def pakistani_story_mode(self):
+        """Interactive Pakistani story mode with sign language"""
+        print("\n📚 Pakistani Story Mode: انگور تو کھٹے ہیں (The Grapes are Sour)")
+        print("=" * 70)
+        print("🦊 A classic Aesop's fable in Pakistani context")
+        print("🤟 Watch the story unfold with sign language gestures")
+        print("🎭 3D character will demonstrate key words and phrases")
+        print("❌ Press ESC or close window to exit story mode")
+        print("=" * 70)
+        
+        # Story segments with corresponding gestures
+        story_segments = [
+            {
+                "text": "ایک دن، ایک بھوکا لومڑی باغ میں گھوم رہا تھا۔",
+                "english": "One day, a hungry fox was wandering in the garden.",
+                "gestures": ["ek", "khana", "ghar"]
+            },
+            {
+                "text": "اس نے اونچی بیل پر لٹکے ہوئے انگور دیکھے۔",
+                "english": "He saw grapes hanging on a high vine.",
+                "gestures": ["paani", "khushi"]
+            },
+            {
+                "text": "لومڑی نے کہا: 'یہ انگور بہت مزیدار لگ رہے ہیں!'",
+                "english": "The fox said: 'These grapes look very delicious!'",
+                "gestures": ["speaking", "khushi"]
+            },
+            {
+                "text": "اس نے اچھلنے کی کوشش کی لیکن انگور تک نہیں پہنچ سکا۔",
+                "english": "He tried to jump but couldn't reach the grapes.",
+                "gestures": ["madad", "gham"]
+            },
+            {
+                "text": "بار بار کوشش کے بعد، لومڑی تھک گیا۔",
+                "english": "After trying many times, the fox got tired.",
+                "gestures": ["gham", "madad"]
+            },
+            {
+                "text": "آخر میں اس نے کہا: 'یہ انگور تو کھٹے ہیں!'",
+                "english": "Finally he said: 'These grapes are sour!'",
+                "gestures": ["speaking", "gham"]
+            },
+            {
+                "text": "اور وہ واپس چلا گیا۔",
+                "english": "And he went back.",
+                "gestures": ["khuda_hafiz"]
+            }
+        ]
+        
+        moral = {
+            "urdu": "سبق: جو چیز ہمیں نہیں مل سکتی، ہم اسے برا کہہ دیتے ہیں۔",
+            "english": "Moral: We often despise what we cannot have.",
+            "gestures": ["kitab", "mohabbat"]
+        }
+        
+        try:
+            from character_3d import SignLanguageCharacter
+            character = SignLanguageCharacter(width=900, height=700)
+            
+            print("\n🎬 Story begins...")
+            time.sleep(2)
+            
+            for i, segment in enumerate(story_segments, 1):
+                print(f"\n📖 Part {i}:")
+                print(f"🇵🇰 {segment['text']}")
+                print(f"🏴󠁧󠁢󠁥󠁮󠁧󠁿 {segment['english']}")
+                
+                # Demonstrate key gestures for this segment
+                print("🤟 Key gestures for this part:")
+                for gesture_name in segment['gestures']:
+                    # Find gesture info
+                    gesture_info = None
+                    for info in self.labels.values():
+                        if info['name'] == gesture_name:
+                            gesture_info = info
+                            break
+                    
+                    if gesture_info:
+                        print(f"  🎭 Demonstrating: {gesture_name} ({gesture_info['english']})")
+                        if not character.run_animation_loop(gesture_name, 2.0):
+                            character.cleanup()
+                            return
+                        time.sleep(0.5)
+                
+                # Pause between segments
+                input("\n⏸️  Press Enter to continue to next part...")
+            
+            # Show moral of the story
+            print("\n" + "=" * 50)
+            print("📚 MORAL OF THE STORY:")
+            print(f"🇵🇰 {moral['urdu']}")
+            print(f"🏴󠁧󠁢󠁥󠁮󠁧󠁿 {moral['english']}")
+            print("=" * 50)
+            
+            # Demonstrate moral gestures
+            print("🤟 Final gestures:")
+            for gesture_name in moral['gestures']:
+                gesture_info = None
+                for info in self.labels.values():
+                    if info['name'] == gesture_name:
+                        gesture_info = info
+                        break
+                
+                if gesture_info:
+                    print(f"  🎭 Demonstrating: {gesture_name} ({gesture_info['english']})")
+                    if not character.run_animation_loop(gesture_name, 3.0):
+                        break
+                    time.sleep(0.5)
+            
+            character.cleanup()
+            print("\n✅ Story completed! Thank you for watching!")
+            print("🎓 You learned sign language through storytelling!")
+            
+            # TTS feedback
+            if self.tts:
+                self.tts.say("Story completed! You learned Pakistani sign language through the tale of the fox and grapes.")
+                self.tts.runAndWait()
+                
+        except Exception as e:
+            print(f"❌ Could not run story mode: {e}")
+            print("📱 Story mode requires a display for 3D character")
 
 def main():
     """Main entry point"""
