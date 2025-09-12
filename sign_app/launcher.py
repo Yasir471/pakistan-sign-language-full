@@ -22,18 +22,25 @@ def print_header():
 
 def check_dependencies():
     """Check if required dependencies are installed"""
-    required_packages = [
-        'pygame', 'opencv-python', 'torch', 'ultralytics',
-        'speechrecognition', 'pyttsx3', 'numpy', 'pillow', 'mediapipe'
-    ]
+    required_packages = {
+        'pygame': 'pygame',
+        'cv2': 'opencv-python',  
+        'torch': 'torch',
+        'ultralytics': 'ultralytics',
+        'speech_recognition': 'speechrecognition',
+        'pyttsx3': 'pyttsx3',
+        'numpy': 'numpy',
+        'PIL': 'pillow',
+        'mediapipe': 'mediapipe'
+    }
     
     missing_packages = []
     
-    for package in required_packages:
+    for import_name, package_name in required_packages.items():
         try:
-            __import__(package.replace('-', '_'))
+            __import__(import_name)
         except ImportError:
-            missing_packages.append(package)
+            missing_packages.append(package_name)
     
     if missing_packages:
         print("❌ Missing required packages:")
