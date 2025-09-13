@@ -167,13 +167,11 @@ const App = () => {
   };
 
   const handleTextToSign = async () => {
-    if (!textInput.trim()) {
-      setError('Please enter some text');
-      return;
-    }
+    if (!textInput.trim()) return;
 
     setIsProcessing(true);
     setError('');
+    setResult(null);
 
     try {
       const response = await axios.post(`${API}/text-to-sign`, {
@@ -181,16 +179,25 @@ const App = () => {
         language: language,
         session_id: sessionId
       });
-
-      if (response.data.success) {
-        setResult({
-          type: 'text_to_sign',
-          data: response.data.result
+      
+      // If we get a valid gesture response, launch 3D character
+      if (response.data && response.data.gesture) {
+        const characterResponse = await launch3DCharacterForGesture({
+          gesture: response.data.gesture
         });
+        
+        // Combine the text-to-sign result with 3D character launch
+        setResult({
+          ...response.data,
+          character: characterResponse,
+          character_launched: characterResponse.status === 'success',
+          original_text: textInput
+        });
+      } else {
+        setResult(response.data);
       }
     } catch (error) {
-      setError(error.response?.data?.detail || 'Text to sign conversion failed');
-      console.error('Text to sign error:', error);
+      setError(error.response?.data?.error || 'Text to sign conversion failed');
     } finally {
       setIsProcessing(false);
     }
