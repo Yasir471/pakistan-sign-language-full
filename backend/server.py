@@ -711,71 +711,131 @@ async def speech_to_sign(request: dict):
 
 @api_router.post("/text-to-sign")
 async def text_to_sign(request: dict):
-    """Convert text to sign language gestures"""
+    """Convert text to sign language gestures with improved Urdu/Pashto support"""
     try:
-        text = request.get('text', '').lower().strip()
+        text = request.get('text', '').strip()
         language = request.get('language', 'english')
         session_id = request.get('session_id', 'demo')
         
         if not text:
-            raise HTTPException(status_code=400, detail="No text provided")
+            return {
+                "success": False,
+                "error": "No text provided",
+                "session_id": session_id
+            }
         
-        # Find corresponding gesture from our expanded database
+        # Enhanced text-to-gesture mapping with Urdu/Pashto support
+        urdu_to_english_mapping = {
+            # Greetings
+            'سلام': 'salam',
+            'سلامات': 'salam', 
+            'السلام علیکم': 'salam',
+            'نمسکار': 'salam',
+            
+            # Thank you variations
+            'شکریہ': 'shukriya',
+            'شكريه': 'shukriya',
+            'تھینک یو': 'shukriya',
+            'مننه': 'shukriya',  # Pashto
+            
+            # Basic needs
+            'پانی': 'paani',
+            'اوبه': 'paani',  # Pashto
+            'کھانا': 'khana',
+            'خواړه': 'khana',  # Pashto
+            'مدد': 'madad',
+            'مرسته': 'madad',  # Pashto
+            
+            # Numbers
+            'ایک': 'ek',
+            'یو': 'ek',  # Pashto
+            'دو': 'do',
+            'دوه': 'do',  # Pashto
+            'تین': 'teen',
+            'درې': 'teen',  # Pashto
+            'چار': 'char',
+            'څلور': 'char',  # Pashto
+            'پانچ': 'panch',
+            'پنځه': 'panch',  # Pashto
+            
+            # Family
+            'ماں': 'maa',
+            'مور': 'maa',  # Pashto
+            'باپ': 'baap',
+            'پلار': 'baap',  # Pashto
+            'بھائی': 'bhai',
+            'ورور': 'bhai',  # Pashto
+            'بہن': 'behan',
+            'خور': 'behan',  # Pashto
+            
+            # Common words
+            'گھر': 'ghar',
+            'کور': 'ghar',  # Pashto
+            'کتاب': 'kitab',
+            'کتاب': 'kitab',  # Same in Pashto
+            'کام': 'kaam',
+            'کار': 'kaam',  # Pashto
+            'دوست': 'dost',
+            'ملګری': 'dost',  # Pashto
+            
+            # Goodbye
+            'خدا حافظ': 'khuda_hafiz',
+            'د خدای په امان': 'khuda_hafiz'  # Pashto
+        }
+        
+        # Also check direct English mapping
+        english_to_gesture_mapping = {
+            'hello': 'salam',
+            'hi': 'salam',
+            'salam': 'salam',
+            'thank you': 'shukriya',
+            'thanks': 'shukriya',
+            'shukriya': 'shukriya',
+            'water': 'paani',
+            'paani': 'paani',
+            'food': 'khana',
+            'khana': 'khana',
+            'help': 'madad',
+            'madad': 'madad',
+            'one': 'ek',
+            'ek': 'ek',
+            'two': 'do',
+            'do': 'do',
+            'three': 'teen',
+            'teen': 'teen',
+            'goodbye': 'khuda_hafiz',
+            'bye': 'khuda_hafiz'
+        }
+        
+        # Normalize and find gesture
+        text_lower = text.lower().strip()
         gesture_name = None
         meaning = None
         
-        # Text to gesture mapping
-        text_mappings = {
-            'hello': 'salam', 'hi': 'salam', 'salam': 'salam',
-            'thank you': 'shukriya', 'thanks': 'shukriya', 'shukriya': 'shukriya',
-            'goodbye': 'khuda_hafiz', 'bye': 'khuda_hafiz', 
-            'water': 'paani', 'paani': 'paani',
-            'food': 'khana', 'eat': 'khana', 'khana': 'khana',
-            'help': 'madad', 'madad': 'madad',
-            'one': 'ek', '1': 'ek', 'ek': 'ek',
-            'two': 'do', '2': 'do', 'do': 'do', 
-            'three': 'teen', '3': 'teen', 'teen': 'teen',
-            'four': 'chaar', '4': 'chaar', 'chaar': 'chaar',
-            'five': 'paanch', '5': 'paanch', 'paanch': 'paanch',
-            'home': 'ghar', 'house': 'ghar', 'ghar': 'ghar',
-            'mother': 'ammi', 'mom': 'ammi', 'ammi': 'ammi',
-            'father': 'abbu', 'dad': 'abbu', 'abbu': 'abbu',
-            'brother': 'bhai', 'bhai': 'bhai',
-            'sister': 'behn', 'behn': 'behn'
-        }
+        # First check Urdu/Pashto mapping
+        if text_lower in urdu_to_english_mapping:
+            gesture_name = urdu_to_english_mapping[text_lower]
+            meaning = f"Pakistani sign for: {text}"
         
-        # Check for direct matches first
-        gesture_name = text_mappings.get(text)
+        # Then check English mapping
+        elif text_lower in english_to_gesture_mapping:
+            gesture_name = english_to_gesture_mapping[text_lower]
+            meaning = f"Sign language for: {text}"
         
-        # If no direct match, check if text contains any keywords
-        if not gesture_name:
-            for keyword, gesture in text_mappings.items():
-                if keyword in text:
-                    gesture_name = gesture
-                    break
-        
-        # Get meaning from our labels
-        meaning_mappings = {
-            'salam': 'Hello/Greeting',
-            'shukriya': 'Thank you',
-            'khuda_hafiz': 'Goodbye', 
-            'paani': 'Water',
-            'khana': 'Food',
-            'madad': 'Help',
-            'ek': 'One',
-            'do': 'Two', 
-            'teen': 'Three',
-            'chaar': 'Four',
-            'paanch': 'Five',
-            'ghar': 'Home',
-            'ammi': 'Mother',
-            'abbu': 'Father',
-            'bhai': 'Brother',
-            'behn': 'Sister'
-        }
-        
-        if gesture_name:
-            meaning = meaning_mappings.get(gesture_name, gesture_name.capitalize())
+        # Check if the gesture exists in our mock dataset
+        if gesture_name and gesture_name in MOCK_GESTURES:
+            gesture_data = MOCK_GESTURES[gesture_name]
+            
+            # Store translation in history
+            await store_translation_history({
+                "session_id": session_id,
+                "type": "text_to_sign",
+                "input_text": text,
+                "input_language": language,
+                "output_gesture": gesture_name,
+                "timestamp": datetime.now(timezone.utc),
+                "confidence": 0.95
+            })
             
             return {
                 "success": True,
@@ -783,8 +843,11 @@ async def text_to_sign(request: dict):
                 "language": language,
                 "gesture": gesture_name,
                 "meaning": meaning,
+                "urdu_text": gesture_data.get("urdu", ""),
+                "pashto_text": gesture_data.get("pashto", ""),
+                "english_meaning": gesture_data.get("meaning", ""),
                 "session_id": session_id,
-                "message": f"Text conversion successful: '{text}' → gesture: {gesture_name}"
+                "message": f"Text '{text}' successfully converted to gesture: {gesture_name}"
             }
         else:
             return {
@@ -794,12 +857,12 @@ async def text_to_sign(request: dict):
                 "gesture": None,
                 "meaning": None,
                 "session_id": session_id,
-                "message": f"Text '{text}' recognized but no matching gesture found. Try: hello, thank you, water, food, help, one, two, three"
+                "message": f"Text '{text}' recognized but no matching gesture found. Try common words like 'سلام', 'شکریہ', 'پانی', 'کھانا'."
             }
-        
+            
     except Exception as e:
-        logger.error(f"Text to sign error: {e}")
-        raise HTTPException(status_code=500, detail=f"Text to sign conversion failed: {str(e)}")
+        logger.error(f"Text-to-sign conversion error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Text-to-sign conversion failed: {str(e)}")
 
 @api_router.get("/history/{session_id}")
 async def get_translation_history(session_id: str):
