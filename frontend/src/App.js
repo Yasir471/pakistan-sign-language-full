@@ -20,6 +20,11 @@ const App = () => {
   const [detectionHistory, setDetectionHistory] = useState([]);
   const [textInput, setTextInput] = useState('');
   const [isContinuousMode, setIsContinuousMode] = useState(false);
+  
+  // 3D Avatar State
+  const [currentGesture, setCurrentGesture] = useState('default');
+  const [isAvatarAnimating, setIsAvatarAnimating] = useState(false);
+  const [gestureInfo, setGestureInfo] = useState(null);
 
   const webcamRef = useRef(null);
   const mediaRecorderRef = useRef(null);
