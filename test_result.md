@@ -276,9 +276,9 @@ backend:
 frontend:
   - task: "3D Avatar Real-time Animation"
     implemented: true
-    working: true
+    working: false
     file: "/app/frontend/src/components/AvatarDisplay.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -303,6 +303,9 @@ frontend:
       - working: true
         agent: "main"
         comment: "🎉 FINAL RESOLUTION ACHIEVED: 3D Avatar animation system is now FULLY FUNCTIONAL! Fixed React Three Fiber state synchronization issue using useRef for stable state access in useFrame callback. Visual confirmation shows: (1) Status changes correctly from '👤 Avatar Ready' to '🎭 Animating', (2) Gesture information displays properly (Gesture: salam, Meaning: Hello), (3) Avatar arms physically move to raised salam position during animation, (4) Smooth return to default pose after 4 seconds. Applied fix to useFrame with currentGestureRef and isAnimatingRef to prevent stale closures. Added updateMatrixWorld() calls for immediate visual updates. Animation system now works for all translation modes and story functionality."
+      - working: false
+        agent: "testing"
+        comment: "🔍 FINAL COMPREHENSIVE TESTING RESULTS (Jan 13, 2025): ROOT CAUSE IDENTIFIED - 3D Avatar Animation System is PARTIALLY WORKING but has CRITICAL TEXT-TO-GESTURE MAPPING ISSUES. DETAILED FINDINGS: ✅ WORKING: Animation system works for English transliterations ('salam', 'Hello') and Story mode - avatar status changes to '🎭 Animating', gesture info displays correctly, physical arm movements visible. ❌ FAILING: Urdu text inputs ('سلام', 'شکریہ') do NOT trigger animations - backend API returns 200 OK but with 'gesture: None' and message 'no matching gesture found'. The React Three Fiber implementation is functional, but backend text-to-gesture mapping fails for native Urdu script. API test confirms: 'سلام' → success: true, gesture: null, message: 'no matching gesture found'. This is a BACKEND MAPPING ISSUE, not frontend animation problem."
 
   - task: "Speech Recognition (Microphone)"
     implemented: true
