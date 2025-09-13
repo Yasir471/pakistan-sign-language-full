@@ -68,85 +68,39 @@ const SignLanguageAvatar = ({ currentGesture, isAnimating }) => {
 
   // Animation loop
   useFrame((state, delta) => {
-    // Always log the useFrame execution to see if it's running
-    if (isAnimating) {
-      console.log('🔄 USEFRAME EXECUTING:', {
-        currentGesture,
-        isAnimating,
-        animationProgress,
-        delta,
-        hasGesture: !!gesturePoses[currentGesture],
-        leftArmExists: !!leftArmRef.current,
-        rightArmExists: !!rightArmRef.current
-      });
-    }
-    
     if (isAnimating && currentGesture && gesturePoses[currentGesture]) {
-      console.log('✅ ANIMATION CONDITIONS MET - Processing frame');
-      
       // Update animation progress (hold at 1.0 when reached, don't reset)
       setAnimationProgress(prev => {
         const newProgress = prev + delta * 3; // Faster transition
-        const clampedProgress = Math.min(newProgress, 1.0);
-        if (prev !== clampedProgress) {
-          console.log('📊 Animation progress updated:', prev, '→', clampedProgress);
-        }
-        return clampedProgress;
+        return Math.min(newProgress, 1.0); // Cap at 1.0, don't reset
       });
 
       // Apply gesture poses with smooth transition to final position
       const gesture = gesturePoses[currentGesture];
       const t = Math.min(animationProgress, 1.0); // Simple linear interpolation to final pose
 
-      console.log('🎯 APPLYING GESTURE POSE:', {
-        gestureName: currentGesture,
-        progress: t,
-        gesture: gesture
-      });
-
       // Animate arms to gesture position and hold
       if (leftArmRef.current && gesture.leftArm) {
-        const newRotationZ = THREE.MathUtils.lerp(0.3, gesture.leftArm.rotation[2], t);
-        const newPositionY = THREE.MathUtils.lerp(0, gesture.leftArm.position[1], t);
-        
         leftArmRef.current.rotation.x = THREE.MathUtils.lerp(0, gesture.leftArm.rotation[0], t);
         leftArmRef.current.rotation.y = THREE.MathUtils.lerp(0, gesture.leftArm.rotation[1], t);
-        leftArmRef.current.rotation.z = newRotationZ;
+        leftArmRef.current.rotation.z = THREE.MathUtils.lerp(0.3, gesture.leftArm.rotation[2], t);
         leftArmRef.current.position.x = THREE.MathUtils.lerp(-1.2, gesture.leftArm.position[0], t);
-        leftArmRef.current.position.y = newPositionY;
-        
-        console.log('👈 LEFT ARM UPDATED:', {
-          rotationZ: newRotationZ,
-          positionY: newPositionY,
-          progress: t
-        });
+        leftArmRef.current.position.y = THREE.MathUtils.lerp(0, gesture.leftArm.position[1], t);
       }
 
       if (rightArmRef.current && gesture.rightArm) {
-        const newRotationZ = THREE.MathUtils.lerp(-0.3, gesture.rightArm.rotation[2], t);
-        const newPositionY = THREE.MathUtils.lerp(0, gesture.rightArm.position[1], t);
-        
         rightArmRef.current.rotation.x = THREE.MathUtils.lerp(0, gesture.rightArm.rotation[0], t);
         rightArmRef.current.rotation.y = THREE.MathUtils.lerp(0, gesture.rightArm.rotation[1], t);
-        rightArmRef.current.rotation.z = newRotationZ;
+        rightArmRef.current.rotation.z = THREE.MathUtils.lerp(-0.3, gesture.rightArm.rotation[2], t);
         rightArmRef.current.position.x = THREE.MathUtils.lerp(1.2, gesture.rightArm.position[0], t);
-        rightArmRef.current.position.y = newPositionY;
-        
-        console.log('👉 RIGHT ARM UPDATED:', {
-          rotationZ: newRotationZ,
-          positionY: newPositionY,
-          progress: t
-        });
+        rightArmRef.current.position.y = THREE.MathUtils.lerp(0, gesture.rightArm.position[1], t);
       }
 
       // Special waving animation for greetings (only if fully transitioned)
       if (gesture.wave && headRef.current && t >= 1.0) {
         headRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 3) * 0.1;
-        console.log('👋 WAVE ANIMATION APPLIED');
       }
     } else if (!isAnimating && animationProgress > 0) {
-      console.log('🔄 RETURNING TO DEFAULT POSE');
-      
       // Reset animation progress and return to default pose
       setAnimationProgress(0);
       
