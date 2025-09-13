@@ -264,28 +264,19 @@ const App = () => {
       // Instead of launching external app, animate the embedded 3D avatar
       const gestureName = gestureData.gesture || 'salam';
       
-      // Reset to default first to ensure animation triggers
-      setCurrentGesture('default');
-      setIsAvatarAnimating(false);
-      setGestureInfo(null);
-      
-      // Small delay then animate
-      setTimeout(() => {
-        setCurrentGesture(gestureName);
-        setIsAvatarAnimating(true);
-        setGestureInfo({
-          name: gestureName,
-          meaning: gestureData.meaning || gestureName.charAt(0).toUpperCase() + gestureName.slice(1)
-        });
-      }, 100);
+      // Set avatar state for animation immediately (no setTimeout delays)
+      setCurrentGesture(gestureName);
+      setIsAvatarAnimating(true);
+      setGestureInfo({
+        name: gestureName,
+        meaning: gestureData.meaning || gestureName.charAt(0).toUpperCase() + gestureName.slice(1)
+      });
 
-      // Animate for 4 seconds, then return to default
+      // Hold the gesture for 4 seconds, then return to default
       setTimeout(() => {
         setIsAvatarAnimating(false);
-        setTimeout(() => {
-          setCurrentGesture('default');
-          setGestureInfo(null);
-        }, 1000);
+        setCurrentGesture('default');
+        setGestureInfo(null);
       }, 4000);
       
       return { 
