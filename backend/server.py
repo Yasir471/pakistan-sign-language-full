@@ -539,6 +539,23 @@ class SpeechService:
 gesture_service = RealGestureRecognitionService()
 speech_service = SpeechService()
 
+# Helper functions
+async def store_translation_history(history_data: dict):
+    """Store translation history in database"""
+    try:
+        history = TranslationHistory(
+            session_id=history_data["session_id"],
+            translation_type=history_data["type"],
+            input_data=history_data["input_text"],
+            output_data=history_data["output_gesture"],
+            language=history_data["input_language"],
+            confidence=history_data.get("confidence"),
+            timestamp=history_data["timestamp"]
+        )
+        await db.translation_history.insert_one(history.dict())
+    except Exception as e:
+        logger.error(f"Failed to store translation history: {e}")
+
 # Models
 class GestureDetectionRequest(BaseModel):
     image_data: str  # Base64 encoded image
