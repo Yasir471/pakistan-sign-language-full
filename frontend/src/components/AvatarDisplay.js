@@ -81,64 +81,75 @@ const SignLanguageAvatar = ({ currentGesture, isAnimating }) => {
     }
   };
 
-  // Animation loop
+  // Animation loop using refs for stable state access
   useFrame((state, delta) => {
-    if (isAnimating && currentGesture && gesturePoses[currentGesture]) {
-      // Update animation progress (hold at 1.0 when reached, don't reset)
+    const gesture = currentGestureRef.current;
+    const animating = isAnimatingRef.current;
+    
+    if (animating && gesture && gesturePoses[gesture] && gesture !== 'default') {
+      // Update animation progress
       setAnimationProgress(prev => {
-        const newProgress = prev + delta * 3; // Faster transition
-        return Math.min(newProgress, 1.0); // Cap at 1.0, don't reset
+        const newProgress = prev + delta * 3;
+        return Math.min(newProgress, 1.0);
       });
 
-      // Apply gesture poses with smooth transition to final position
-      const gesture = gesturePoses[currentGesture];
-      const t = Math.min(animationProgress, 1.0); // Simple linear interpolation to final pose
+      // Get current gesture pose
+      const gestureData = gesturePoses[gesture];
+      const t = Math.min(animationProgress, 1.0);
 
-      // Animate arms to gesture position and hold
-      if (leftArmRef.current && gesture.leftArm) {
-        leftArmRef.current.rotation.x = THREE.MathUtils.lerp(0, gesture.leftArm.rotation[0], t);
-        leftArmRef.current.rotation.y = THREE.MathUtils.lerp(0, gesture.leftArm.rotation[1], t);
-        leftArmRef.current.rotation.z = THREE.MathUtils.lerp(0.3, gesture.leftArm.rotation[2], t);
-        leftArmRef.current.position.x = THREE.MathUtils.lerp(-1.2, gesture.leftArm.position[0], t);
-        leftArmRef.current.position.y = THREE.MathUtils.lerp(0, gesture.leftArm.position[1], t);
+      // Animate arms to gesture position
+      if (leftArmRef.current && gestureData.leftArm) {
+        leftArmRef.current.rotation.x = THREE.MathUtils.lerp(0, gestureData.leftArm.rotation[0], t);
+        leftArmRef.current.rotation.y = THREE.MathUtils.lerp(0, gestureData.leftArm.rotation[1], t);
+        leftArmRef.current.rotation.z = THREE.MathUtils.lerp(0.3, gestureData.leftArm.rotation[2], t);
+        leftArmRef.current.position.x = THREE.MathUtils.lerp(-1.2, gestureData.leftArm.position[0], t);
+        leftArmRef.current.position.y = THREE.MathUtils.lerp(0, gestureData.leftArm.position[1], t);
+        
+        // Force matrix update
+        leftArmRef.current.updateMatrixWorld();
       }
 
-      if (rightArmRef.current && gesture.rightArm) {
-        rightArmRef.current.rotation.x = THREE.MathUtils.lerp(0, gesture.rightArm.rotation[0], t);
-        rightArmRef.current.rotation.y = THREE.MathUtils.lerp(0, gesture.rightArm.rotation[1], t);
-        rightArmRef.current.rotation.z = THREE.MathUtils.lerp(-0.3, gesture.rightArm.rotation[2], t);
-        rightArmRef.current.position.x = THREE.MathUtils.lerp(1.2, gesture.rightArm.position[0], t);
-        rightArmRef.current.position.y = THREE.MathUtils.lerp(0, gesture.rightArm.position[1], t);
+      if (rightArmRef.current && gestureData.rightArm) {
+        rightArmRef.current.rotation.x = THREE.MathUtils.lerp(0, gestureData.rightArm.rotation[0], t);
+        rightArmRef.current.rotation.y = THREE.MathUtils.lerp(0, gestureData.rightArm.rotation[1], t);
+        rightArmRef.current.rotation.z = THREE.MathUtils.lerp(-0.3, gestureData.rightArm.rotation[2], t);
+        rightArmRef.current.position.x = THREE.MathUtils.lerp(1.2, gestureData.rightArm.position[0], t);
+        rightArmRef.current.position.y = THREE.MathUtils.lerp(0, gestureData.rightArm.position[1], t);
+        
+        // Force matrix update
+        rightArmRef.current.updateMatrixWorld();
       }
 
-      // Special waving animation for greetings (only if fully transitioned)
-      if (gesture.wave && headRef.current && t >= 1.0) {
+      // Special waving animation for greetings
+      if (gestureData.wave && headRef.current && t >= 1.0) {
         headRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 3) * 0.1;
+        headRef.current.updateMatrixWorld();
       }
-    } else if (!isAnimating && animationProgress > 0) {
-      // Reset animation progress and return to default pose
+    } else if (!animating && animationProgress > 0) {
+      // Return to default pose
       setAnimationProgress(0);
       
-      // Return to default pose smoothly
-      const defaultGesture = gesturePoses['default'];
-      if (leftArmRef.current && defaultGesture.leftArm) {
+      if (leftArmRef.current) {
         leftArmRef.current.rotation.x = THREE.MathUtils.lerp(leftArmRef.current.rotation.x, 0, 0.1);
         leftArmRef.current.rotation.y = THREE.MathUtils.lerp(leftArmRef.current.rotation.y, 0, 0.1);
         leftArmRef.current.rotation.z = THREE.MathUtils.lerp(leftArmRef.current.rotation.z, 0.3, 0.1);
         leftArmRef.current.position.x = THREE.MathUtils.lerp(leftArmRef.current.position.x, -1.2, 0.1);
         leftArmRef.current.position.y = THREE.MathUtils.lerp(leftArmRef.current.position.y, 0, 0.1);
+        leftArmRef.current.updateMatrixWorld();
       }
-      if (rightArmRef.current && defaultGesture.rightArm) {
+      
+      if (rightArmRef.current) {
         rightArmRef.current.rotation.x = THREE.MathUtils.lerp(rightArmRef.current.rotation.x, 0, 0.1);
         rightArmRef.current.rotation.y = THREE.MathUtils.lerp(rightArmRef.current.rotation.y, 0, 0.1);
         rightArmRef.current.rotation.z = THREE.MathUtils.lerp(rightArmRef.current.rotation.z, -0.3, 0.1);
         rightArmRef.current.position.x = THREE.MathUtils.lerp(rightArmRef.current.position.x, 1.2, 0.1);
         rightArmRef.current.position.y = THREE.MathUtils.lerp(rightArmRef.current.position.y, 0, 0.1);
+        rightArmRef.current.updateMatrixWorld();
       }
       
-      // Reset head rotation
       if (headRef.current) {
         headRef.current.rotation.y = THREE.MathUtils.lerp(headRef.current.rotation.y, 0, 0.1);
+        headRef.current.updateMatrixWorld();
       }
     }
   });
