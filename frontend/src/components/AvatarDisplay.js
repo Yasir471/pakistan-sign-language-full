@@ -339,16 +339,6 @@ const Hand = ({ gesture, side }) => {
 
 // Main Avatar Display Component
 const AvatarDisplay = ({ currentGesture, isAnimating, gestureInfo }) => {
-  // Debug logging to trace prop changes
-  useEffect(() => {
-    console.log('📋 AVATARDISPLAY PROPS CHANGED:', {
-      currentGesture,
-      isAnimating,
-      gestureInfo,
-      timestamp: new Date().toISOString()
-    });
-  }, [currentGesture, isAnimating, gestureInfo]);
-
   return (
     <div className="bg-gradient-to-b from-blue-50 to-indigo-100 rounded-lg p-4 h-96 relative overflow-hidden shadow-lg border-2 border-blue-200">
       {/* 3D Canvas */}
