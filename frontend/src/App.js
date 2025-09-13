@@ -135,54 +135,127 @@ const App = () => {
   };
 
   const handleSpeechToSign = async () => {
+    // Check if browser supports speech recognition
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      setError('Speech recognition not supported in this browser. Please use Chrome, Edge, or Safari.');
+      return;
+    }
+
     setIsProcessing(true);
+    setIsRecording(true);
     setError('');
     setResult(null);
 
     try {
-      const response = await axios.post(`${API}/speech-to-sign`, {
-        language: language,
-        session_id: sessionId
-      });
+      // Use browser's speech recognition API
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
       
-      // Check if the response is successful
-      if (response.data && response.data.success) {
-        // If we get a valid gesture response, launch 3D character
-        if (response.data.gesture) {
-          const characterResponse = await launch3DCharacterForGesture({
-            gesture: response.data.gesture
+      // Configure recognition settings
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      
+      // Set language based on user selection
+      const languageMap = {
+        'urdu': 'ur-PK',
+        'pashto': 'ps-AF', 
+        'english': 'en-US'
+      };
+      recognition.lang = languageMap[language] || 'en-US';
+
+      recognition.onstart = () => {
+        console.log('Speech recognition started');
+        setIsRecording(true);
+      };
+
+      recognition.onresult = async (event) => {
+        const transcript = event.results[0][0].transcript;
+        console.log('Speech recognized:', transcript);
+        
+        try {
+          // Send the recognized text to backend for gesture mapping
+          const response = await axios.post(`${API}/text-to-sign`, {
+            text: transcript,
+            language: language,
+            session_id: sessionId
           });
           
-          // Combine the speech recognition result with 3D character launch
-          setResult({
-            type: 'speech_to_sign',
-            recognized_text: response.data.recognized_text,
-            language: response.data.language,
-            gesture: response.data.gesture,
-            meaning: response.data.meaning,
-            message: response.data.message,
-            character: characterResponse,
-            character_launched: characterResponse.status === 'success'
-          });
-        } else {
-          setResult({
-            type: 'speech_to_sign',
-            recognized_text: response.data.recognized_text,
-            language: response.data.language,
-            gesture: null,
-            meaning: null,
-            message: response.data.message,
-            character: null,
-            character_launched: false
-          });
+          if (response.data && response.data.success) {
+            // If we get a valid gesture response, launch 3D character
+            if (response.data.gesture) {
+              const characterResponse = await launch3DCharacterForGesture({
+                gesture: response.data.gesture,
+                meaning: response.data.meaning
+              });
+              
+              setResult({
+                type: 'speech_to_sign',
+                recognized_text: transcript,
+                language: language,
+                gesture: response.data.gesture,
+                meaning: response.data.meaning,
+                message: `Speech recognized: "${transcript}" → Sign: ${response.data.gesture}`,
+                character: characterResponse,
+                character_launched: characterResponse.status === 'success'
+              });
+            } else {
+              setResult({
+                type: 'speech_to_sign',
+                recognized_text: transcript,
+                language: language,
+                gesture: null,
+                meaning: null,
+                message: `Speech recognized: "${transcript}" (No matching gesture found)`,
+                character: null,
+                character_launched: false
+              });
+            }
+          }
+        } catch (error) {
+          console.error('Error processing speech:', error);
+          setError('Failed to process speech recognition result');
         }
-      } else {
-        setError('Speech recognition failed - invalid response');
-      }
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        let errorMessage = 'Speech recognition failed';
+        
+        switch(event.error) {
+          case 'no-speech':
+            errorMessage = 'No speech detected. Please try again.';
+            break;
+          case 'audio-capture':
+            errorMessage = 'No microphone found. Please check your microphone settings.';
+            break;
+          case 'not-allowed':
+            errorMessage = 'Microphone permission denied. Please allow microphone access.';
+            break;
+          case 'network':
+            errorMessage = 'Network error occurred during speech recognition.';
+            break;
+          default:
+            errorMessage = `Speech recognition error: ${event.error}`;
+        }
+        
+        setError(errorMessage);
+      };
+
+      recognition.onend = () => {
+        setIsRecording(false);
+        setIsProcessing(false);
+        console.log('Speech recognition ended');
+      };
+
+      // Start recognition
+      recognition.start();
+      
     } catch (error) {
-      setError(error.response?.data?.detail || error.response?.data?.error || 'Speech recognition failed');
-    } finally {
+      console.error('Speech recognition setup error:', error);
+      setError('Failed to start speech recognition');
       setIsProcessing(false);
+      setIsRecording(false);
     }
   };
 
