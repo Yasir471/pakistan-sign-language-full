@@ -314,48 +314,67 @@ const App = () => {
         );
 
       case 'speech_to_sign':
-      case 'text_to_sign':
-        const data = result.data;
         return (
           <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <h3 className="text-xl font-bold mb-4 text-blue-600">
-              {result.type === 'speech_to_sign' ? '🎤 Speech Recognition Result' : '📝 Text Translation Result'}
-            </h3>
+            <h3 className="text-xl font-bold mb-4 text-green-600">🎤 Speech Recognition Result</h3>
             <div className="space-y-4">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">
-                  {result.type === 'speech_to_sign' ? 'Recognized Text' : 'Input Text'}
-                </p>
-                <p className="text-lg font-semibold p-3 bg-gray-50 rounded-lg">
-                  {data.recognized_text || data.input_text}
-                </p>
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <p className="text-lg mb-2">🔤 <strong>Recognized Speech:</strong> {result.recognized_text}</p>
+                <p className="text-sm text-blue-700">Language: {result.language}</p>
               </div>
-              {data.gesture_found ? (
+              
+              {result.gesture && (
                 <div className="bg-green-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-green-800 mb-2">🎯 Matching Gesture Found!</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div>
-                      <p className="text-sm text-gray-600">Gesture</p>
-                      <p className="font-semibold capitalize">{data.gesture.replace('_', ' ')}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-600">Meaning</p>
-                      <p className="font-semibold">{data.gesture_data.meaning}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-600">Urdu</p>
-                      <p className="font-semibold text-blue-600 urdu-text">{data.gesture_data.urdu}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-600">Pashto</p>
-                      <p className="font-semibold text-purple-600 pashto-text">{data.gesture_data.pashto}</p>
-                    </div>
-                  </div>
+                  <p className="text-lg mb-2">🤟 <strong>Gesture:</strong> {result.gesture}</p>
+                  <p className="text-sm text-green-700">Meaning: {result.meaning}</p>
+                </div>
+              )}
+
+              {result.character_launched ? (
+                <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+                  <h5 className="font-semibold text-yellow-800 mb-2">🎭 3D Character Status:</h5>
+                  <p className="text-sm text-yellow-700">✅ {result.character.message}</p>
+                  <p className="text-xs text-yellow-600 mt-2">{result.character.instructions}</p>
                 </div>
               ) : (
-                <div className="bg-yellow-50 p-4 rounded-lg">
-                  <p className="text-yellow-800">⚠️ {data.message}</p>
-                  <p className="text-sm text-yellow-600 mt-1">Try different words or check the available gestures list</p>
+                <div className="bg-red-50 border border-red-200 p-4 rounded-lg">
+                  <h5 className="font-semibold text-red-800 mb-2">⚠️ 3D Character Status:</h5>
+                  <p className="text-sm text-red-700">❌ {result.character?.message || 'Character launch failed'}</p>
+                  <p className="text-xs text-red-600 mt-2">{result.character?.fallback}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+
+      case 'text_to_sign':
+        return (
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h3 className="text-xl font-bold mb-4 text-purple-600">📝 Text to Sign Result</h3>
+            <div className="space-y-4">
+              <div className="bg-purple-50 p-4 rounded-lg">
+                <p className="text-lg mb-2">📝 <strong>Your Text:</strong> {result.original_text}</p>
+                <p className="text-sm text-purple-700">Language: {result.language}</p>
+              </div>
+              
+              {result.gesture && (
+                <div className="bg-green-50 p-4 rounded-lg">
+                  <p className="text-lg mb-2">🤟 <strong>Gesture:</strong> {result.gesture}</p>
+                  <p className="text-sm text-green-700">Meaning: {result.meaning}</p>
+                </div>
+              )}
+
+              {result.character_launched ? (
+                <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+                  <h5 className="font-semibold text-yellow-800 mb-2">🎭 3D Character Status:</h5>
+                  <p className="text-sm text-yellow-700">✅ {result.character.message}</p>
+                  <p className="text-xs text-yellow-600 mt-2">{result.character.instructions}</p>
+                </div>
+              ) : (
+                <div className="bg-red-50 border border-red-200 p-4 rounded-lg">
+                  <h5 className="font-semibold text-red-800 mb-2">⚠️ 3D Character Status:</h5>
+                  <p className="text-sm text-red-700">❌ {result.character?.message || 'Character launch failed'}</p>
+                  <p className="text-xs text-red-600 mt-2">{result.character?.fallback}</p>
                 </div>
               )}
             </div>
