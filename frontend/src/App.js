@@ -67,9 +67,23 @@ const App = () => {
 
       if (response.data.success) {
         const detection = response.data.detection;
+        
+        // Launch 3D character if a real gesture was detected
+        let characterResponse = null;
+        let characterLaunched = false;
+        
+        if (detection.gesture !== "no_hand_detected") {
+          characterResponse = await launch3DCharacterForGesture({
+            gesture: detection.gesture
+          });
+          characterLaunched = characterResponse.status === 'success';
+        }
+        
         setResult({
           type: 'gesture_detection',
-          data: detection
+          data: detection,
+          character: characterResponse,
+          character_launched: characterLaunched
         });
         
         // Only add to history if a real gesture was detected
