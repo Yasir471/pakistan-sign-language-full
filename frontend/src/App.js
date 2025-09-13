@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import Webcam from 'react-webcam';
 import axios from 'axios';
+import AvatarDisplay from './components/AvatarDisplay';
 import './App.css';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
