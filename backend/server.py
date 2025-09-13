@@ -731,6 +731,56 @@ async def get_translation_history(session_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch history: {str(e)}")
 
+@api_router.post("/launch-3d-character")
+async def launch_3d_character(request: dict):
+    """Launch 3D character for gesture demonstration"""
+    try:
+        gesture_name = request.get('gesture', 'salam')
+        language = request.get('language', 'urdu')
+        mode = request.get('mode', 'gesture')  # 'gesture' or 'story'
+        
+        # Launch the 3D character Python script
+        import subprocess
+        import sys
+        import os
+        
+        if mode == 'story':
+            # Launch story mode
+            cmd = [sys.executable, '/app/sign_app/pakistani_story.py']
+        else:
+            # Launch single gesture demo
+            cmd = [sys.executable, '/app/sign_app/character_3d.py']
+        
+        # Run the 3D character in background
+        process = subprocess.Popen(
+            cmd,
+            cwd='/app/sign_app',
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            env=dict(os.environ, DISPLAY=':0')  # Set display for GUI
+        )
+        
+        # Give it a moment to start
+        import time
+        time.sleep(1)
+        
+        return {
+            "status": "success",
+            "message": f"3D Character launched for {mode}",
+            "gesture": gesture_name,
+            "language": language,
+            "pid": process.pid,
+            "instructions": "3D character window should now be open. Close the window when done."
+        }
+        
+    except Exception as e:
+        logger.error(f"3D character launch error: {e}")
+        return {
+            "status": "error", 
+            "message": f"Failed to launch 3D character: {str(e)}",
+            "fallback": "3D character requires display support. Try running the Python scripts directly."
+        }
+
 @api_router.get("/stats")
 async def get_stats():
     """Get application statistics"""
