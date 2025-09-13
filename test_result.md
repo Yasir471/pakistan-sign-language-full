@@ -197,11 +197,11 @@ backend:
 
   - task: "3D Character Animation System"
     implemented: true
-    working: true
+    working: false
     file: "/app/sign_app/character_3d.py"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
@@ -209,6 +209,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ TESTED: 3D Character Animation System working correctly. Successfully imported SignLanguageCharacter class, initialized with 133 gesture poses including all key Pakistani gestures (salam, shukriya, ek, do, paani, khana). Animation methods functional with smooth gesture transitions and proper pose mappings."
+      - working: false
+        agent: "user"
+        comment: "USER FEEDBACK: 3D animation character is not working in the web frontend. The avatar appears static and not animating gestures as expected."
 
   - task: "Complete Sign Language App"
     implemented: true
