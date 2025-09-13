@@ -69,8 +69,6 @@ const SignLanguageAvatar = ({ currentGesture, isAnimating }) => {
   // Animation loop
   useFrame((state, delta) => {
     if (isAnimating && currentGesture && gesturePoses[currentGesture]) {
-      console.log('🔄 Animating frame for gesture:', currentGesture);
-      
       setAnimationProgress(prev => {
         const newProgress = prev + delta * 2; // Animation speed
         return newProgress > 1 ? 0 : newProgress; // Loop animation
@@ -79,8 +77,6 @@ const SignLanguageAvatar = ({ currentGesture, isAnimating }) => {
       // Apply gesture poses with smooth interpolation
       const gesture = gesturePoses[currentGesture];
       const t = (Math.sin(animationProgress * Math.PI * 2) + 1) / 2; // Smooth easing
-
-      console.log('📊 Animation progress:', animationProgress, 't:', t);
 
       // Animate arms
       if (leftArmRef.current && gesture.leftArm) {
