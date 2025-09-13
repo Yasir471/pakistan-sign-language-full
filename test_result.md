@@ -345,15 +345,18 @@ frontend:
 
   - task: "Language Selection (Urdu/Pashto)"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented bilingual support with Urdu and Pashto language selection. UI shows native script for both languages."
+      - working: true
+        agent: "testing"
+        comment: "✅ VERIFIED: Language selection working correctly. Both Urdu (اردو) and Pashto (پښتو) buttons found with proper native script display and visual feedback when selected."
 
   - task: "Real-time Results Display"
     implemented: true
