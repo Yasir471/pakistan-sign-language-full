@@ -355,33 +355,28 @@ const App = () => {
     setResult(null);
 
     try {
-      // Animate avatar for story mode
-      setCurrentGesture('salam'); // Start with greeting
-      setIsAvatarAnimating(true);
-      setGestureInfo({
-        name: 'Pakistani Story',
-        meaning: `The Sour Grapes in ${storyLanguage}`
-      });
-
-      // Simulate story progression with different gestures
+      // Animate avatar for story mode with multiple gestures
       const storyGestures = ['salam', 'ek', 'paani', 'khana', 'shukriya'];
       let currentIndex = 0;
 
-      const storyInterval = setInterval(() => {
+      // Start with first gesture
+      await launch3DCharacterForGesture({ 
+        gesture: storyGestures[0], 
+        meaning: `Story in ${storyLanguage} - Part 1` 
+      });
+
+      // Story progression with different gestures
+      const storyInterval = setInterval(async () => {
+        currentIndex++;
         if (currentIndex < storyGestures.length) {
-          setCurrentGesture(storyGestures[currentIndex]);
-          setGestureInfo({
-            name: storyGestures[currentIndex],
-            meaning: `Story element ${currentIndex + 1}`
+          await launch3DCharacterForGesture({
+            gesture: storyGestures[currentIndex],
+            meaning: `Story Part ${currentIndex + 1}`
           });
-          currentIndex++;
         } else {
           clearInterval(storyInterval);
-          setIsAvatarAnimating(false);
-          setCurrentGesture('default');
-          setGestureInfo(null);
         }
-      }, 3000);
+      }, 4500); // Slightly longer than gesture duration to allow transitions
       
       setResult({
         type: 'story',
@@ -389,19 +384,18 @@ const App = () => {
         story: {
           title: storyLanguage === 'urdu' ? 'انگور تو کھٹے ہیں' : 
                  storyLanguage === 'pashto' ? 'انګور خو تروې دي' : 'The Sour Grapes',
-          message: `3D Avatar is telling the Pakistani story in ${storyLanguage}`,
-          instructions: 'Watch the 3D avatar demonstrate the story with Pakistani sign language gestures!',
-          status: 'animating'
+          message: `3D Avatar is telling the Pakistani story in ${storyLanguage} with animated gestures`,
+          instructions: 'Watch the 3D avatar demonstrate the story with a sequence of Pakistani sign language gestures!',
+          status: 'animating',
+          gestures: storyGestures,
+          duration: storyGestures.length * 4.5 // Total story duration
         }
       });
 
-      // Clean up after 15 seconds
+      // Clean up after story completes
       setTimeout(() => {
         clearInterval(storyInterval);
-        setIsAvatarAnimating(false);
-        setCurrentGesture('default');
-        setGestureInfo(null);
-      }, 15000);
+      }, storyGestures.length * 4500);
       
     } catch (error) {
       setError('Story mode failed to start. Please try again.');
