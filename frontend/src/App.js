@@ -264,8 +264,6 @@ const App = () => {
       // Instead of launching external app, animate the embedded 3D avatar
       const gestureName = gestureData.gesture || 'salam';
       
-      console.log('🎭 Animating gesture:', gestureName, gestureData);
-      
       // Reset to default first to ensure animation triggers
       setCurrentGesture('default');
       setIsAvatarAnimating(false);
@@ -279,22 +277,14 @@ const App = () => {
           name: gestureName,
           meaning: gestureData.meaning || gestureName.charAt(0).toUpperCase() + gestureName.slice(1)
         });
-        
-        console.log('✅ Animation state set:', {
-          gesture: gestureName,
-          animating: true,
-          meaning: gestureData.meaning
-        });
       }, 100);
 
       // Animate for 4 seconds, then return to default
       setTimeout(() => {
-        console.log('🔄 Stopping animation for:', gestureName);
         setIsAvatarAnimating(false);
         setTimeout(() => {
           setCurrentGesture('default');
           setGestureInfo(null);
-          console.log('🏁 Animation complete, returned to default');
         }, 1000);
       }, 4000);
       
