@@ -282,47 +282,63 @@ const App = () => {
         return (
           <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
             <h3 className="text-xl font-bold mb-4 text-green-600">✋ Real Hand Gesture Detected!</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Gesture</p>
-                <p className="text-lg font-semibold capitalize">{detection.gesture.replace('_', ' ')}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Confidence</p>
-                <div className="flex items-center">
-                  <p className="text-lg font-semibold mr-2">{(detection.confidence * 100).toFixed(1)}%</p>
-                  <div className="flex-1 bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-green-500 h-2 rounded-full transition-all duration-300" 
-                      style={{width: `${detection.confidence * 100}%`}}
-                    ></div>
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-gray-600 mb-1">Gesture</p>
+                  <p className="text-lg font-semibold capitalize">{detection.gesture.replace('_', ' ')}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600 mb-1">Confidence</p>
+                  <div className="flex items-center">
+                    <p className="text-lg font-semibold mr-2">{(detection.confidence * 100).toFixed(1)}%</p>
+                    <div className="flex-1 bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-green-500 h-2 rounded-full transition-all duration-300" 
+                        style={{width: `${detection.confidence * 100}%`}}
+                      ></div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Urdu</p>
-                <p className="text-lg font-semibold text-blue-600 urdu-text">{detection.urdu_text}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Pashto</p>
-                <p className="text-lg font-semibold text-purple-600 pashto-text">{detection.pashto_text}</p>
-              </div>
-              <div className="md:col-span-2">
-                <p className="text-sm text-gray-600 mb-1">Meaning</p>
-                <p className="text-lg font-semibold text-gray-800">{detection.meaning}</p>
-              </div>
-              {detection.detection_method && (
-                <div className="md:col-span-2 bg-blue-50 p-3 rounded-lg">
-                  <p className="text-sm text-blue-800">
-                    <span className="font-medium">Detection Engine:</span> {detection.detection_method}
-                  </p>
-                  {detection.landmarks_detected && (
-                    <p className="text-xs text-blue-600 mt-1">
-                      ✓ Hand tracking successfully detected and analyzed
-                    </p>
-                  )}
+                <div>
+                  <p className="text-sm text-gray-600 mb-1">Urdu</p>
+                  <p className="text-lg font-semibold text-blue-600 urdu-text">{detection.urdu_text}</p>
                 </div>
-              )}
+                <div>
+                  <p className="text-sm text-gray-600 mb-1">Pashto</p>
+                  <p className="text-lg font-semibold text-purple-600 pashto-text">{detection.pashto_text}</p>
+                </div>
+                <div className="md:col-span-2">
+                  <p className="text-sm text-gray-600 mb-1">Meaning</p>
+                  <p className="text-lg font-semibold text-gray-800">{detection.meaning}</p>
+                </div>
+                {detection.detection_method && (
+                  <div className="md:col-span-2 bg-blue-50 p-3 rounded-lg">
+                    <p className="text-sm text-blue-800">
+                      <span className="font-medium">Detection Engine:</span> {detection.detection_method}
+                    </p>
+                    {detection.landmarks_detected && (
+                      <p className="text-xs text-blue-600 mt-1">
+                        ✓ Hand tracking successfully detected and analyzed
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {result.character_launched ? (
+                <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+                  <h5 className="font-semibold text-yellow-800 mb-2">🎭 3D Character Status:</h5>
+                  <p className="text-sm text-yellow-700">✅ {result.character.message}</p>
+                  <p className="text-xs text-yellow-600 mt-2">{result.character.instructions}</p>
+                </div>
+              ) : result.character ? (
+                <div className="bg-red-50 border border-red-200 p-4 rounded-lg">
+                  <h5 className="font-semibold text-red-800 mb-2">⚠️ 3D Character Status:</h5>
+                  <p className="text-sm text-red-700">❌ {result.character.message || 'Character launch failed'}</p>
+                  <p className="text-xs text-red-600 mt-2">{result.character.fallback}</p>
+                </div>
+              ) : null}
             </div>
           </div>
         );
