@@ -13,6 +13,15 @@ const SignLanguageAvatar = ({ currentGesture, isAnimating }) => {
   const headRef = useRef();
   const [animationProgress, setAnimationProgress] = useState(0);
 
+  // Debug logging to trace prop changes
+  useEffect(() => {
+    console.log('🎭 SIGNLANGUAGEAVATAR PROPS CHANGED:', {
+      currentGesture,
+      isAnimating,
+      timestamp: new Date().toISOString()
+    });
+  }, [currentGesture, isAnimating]);
+
   // Gesture pose definitions for Pakistani Sign Language
   const gesturePoses = {
     'default': {
