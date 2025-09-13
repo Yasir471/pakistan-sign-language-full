@@ -142,6 +142,25 @@ const App = () => {
     }
   };
 
+  const launch3DCharacterForGesture = async (gestureData) => {
+    try {
+      const response = await axios.post(`${API}/launch-3d-character`, {
+        mode: 'gesture',
+        gesture: gestureData.gesture || 'salam',
+        language: language
+      });
+      
+      return response.data;
+    } catch (error) {
+      console.error('3D Character launch error:', error);
+      return { 
+        status: 'error', 
+        message: 'Failed to launch 3D character',
+        fallback: 'Character animation not available in web environment' 
+      };
+    }
+  };
+
   const handleTextToSign = async () => {
     if (!textInput.trim()) {
       setError('Please enter some text');
