@@ -693,44 +693,95 @@ async def speech_to_sign(request: dict):
         raise HTTPException(status_code=500, detail=f"Speech recognition failed: {str(e)}")
 
 @api_router.post("/text-to-sign")
-async def text_to_sign(request: TextToSignRequest):
+async def text_to_sign(request: dict):
     """Convert text to sign language gestures"""
     try:
-        # Find corresponding gesture
-        gesture_match = speech_service.find_gesture_for_text(request.text, request.language)
+        text = request.get('text', '').lower().strip()
+        language = request.get('language', 'english')
+        session_id = request.get('session_id', 'demo')
         
-        result = {
-            "input_text": request.text,
-            "language": request.language,
-            "gesture_found": gesture_match is not None
+        if not text:
+            raise HTTPException(status_code=400, detail="No text provided")
+        
+        # Find corresponding gesture from our expanded database
+        gesture_name = None
+        meaning = None
+        
+        # Text to gesture mapping
+        text_mappings = {
+            'hello': 'salam', 'hi': 'salam', 'salam': 'salam',
+            'thank you': 'shukriya', 'thanks': 'shukriya', 'shukriya': 'shukriya',
+            'goodbye': 'khuda_hafiz', 'bye': 'khuda_hafiz', 
+            'water': 'paani', 'paani': 'paani',
+            'food': 'khana', 'eat': 'khana', 'khana': 'khana',
+            'help': 'madad', 'madad': 'madad',
+            'one': 'ek', '1': 'ek', 'ek': 'ek',
+            'two': 'do', '2': 'do', 'do': 'do', 
+            'three': 'teen', '3': 'teen', 'teen': 'teen',
+            'four': 'chaar', '4': 'chaar', 'chaar': 'chaar',
+            'five': 'paanch', '5': 'paanch', 'paanch': 'paanch',
+            'home': 'ghar', 'house': 'ghar', 'ghar': 'ghar',
+            'mother': 'ammi', 'mom': 'ammi', 'ammi': 'ammi',
+            'father': 'abbu', 'dad': 'abbu', 'abbu': 'abbu',
+            'brother': 'bhai', 'bhai': 'bhai',
+            'sister': 'behn', 'behn': 'behn'
         }
         
-        if gesture_match:
-            result.update({
-                "gesture": gesture_match["gesture"],
-                "gesture_data": gesture_match["data"]
-            })
+        # Check for direct matches first
+        gesture_name = text_mappings.get(text)
+        
+        # If no direct match, check if text contains any keywords
+        if not gesture_name:
+            for keyword, gesture in text_mappings.items():
+                if keyword in text:
+                    gesture_name = gesture
+                    break
+        
+        # Get meaning from our labels
+        meaning_mappings = {
+            'salam': 'Hello/Greeting',
+            'shukriya': 'Thank you',
+            'khuda_hafiz': 'Goodbye', 
+            'paani': 'Water',
+            'khana': 'Food',
+            'madad': 'Help',
+            'ek': 'One',
+            'do': 'Two', 
+            'teen': 'Three',
+            'chaar': 'Four',
+            'paanch': 'Five',
+            'ghar': 'Home',
+            'ammi': 'Mother',
+            'abbu': 'Father',
+            'bhai': 'Brother',
+            'behn': 'Sister'
+        }
+        
+        if gesture_name:
+            meaning = meaning_mappings.get(gesture_name, gesture_name.capitalize())
+            
+            return {
+                "success": True,
+                "original_text": text,
+                "language": language,
+                "gesture": gesture_name,
+                "meaning": meaning,
+                "session_id": session_id,
+                "message": f"Text conversion successful: '{text}' → gesture: {gesture_name}"
+            }
         else:
-            result["message"] = "No matching gesture found for this text"
-        
-        # Save to history
-        history = TranslationHistory(
-            session_id=request.session_id,
-            translation_type="text_to_sign",
-            input_data=request.text,
-            output_data=json.dumps(result),
-            language=request.language
-        )
-        
-        await db.translation_history.insert_one(history.dict())
-        
-        return {
-            "success": True,
-            "result": result,
-            "session_id": request.session_id
-        }
+            return {
+                "success": True,
+                "original_text": text,
+                "language": language,
+                "gesture": None,
+                "meaning": None,
+                "session_id": session_id,
+                "message": f"Text '{text}' recognized but no matching gesture found. Try: hello, thank you, water, food, help, one, two, three"
+            }
         
     except Exception as e:
+        logger.error(f"Text to sign error: {e}")
         raise HTTPException(status_code=500, detail=f"Text to sign conversion failed: {str(e)}")
 
 @api_router.get("/history/{session_id}")
