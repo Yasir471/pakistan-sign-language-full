@@ -669,6 +669,16 @@ const App = () => {
               <p className="text-sm text-gray-600 text-center mt-2">
                 The avatar will animate Pakistani sign language gestures in real-time as you interact with the app
               </p>
+              
+              {/* Test Animation Button - Temporary */}
+              <div className="flex justify-center mt-4">
+                <button
+                  onClick={() => launch3DCharacterForGesture({ gesture: 'salam', meaning: 'Hello' })}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600"
+                >
+                  🧪 Test Animation
+                </button>
+              </div>
             </div>
 
             {mode === 'sign-to-speech' && (
