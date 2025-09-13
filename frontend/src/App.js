@@ -188,19 +188,37 @@ const App = () => {
 
   const launch3DCharacterForGesture = async (gestureData) => {
     try {
-      const response = await axios.post(`${API}/launch-3d-character`, {
-        mode: 'gesture',
-        gesture: gestureData.gesture || 'salam',
-        language: language
-      });
+      // Instead of launching external app, animate the embedded 3D avatar
+      const gestureName = gestureData.gesture || 'salam';
       
-      return response.data;
+      // Set avatar state for animation
+      setCurrentGesture(gestureName);
+      setIsAvatarAnimating(true);
+      setGestureInfo({
+        name: gestureName,
+        meaning: gestureData.meaning || gestureName.charAt(0).toUpperCase() + gestureName.slice(1)
+      });
+
+      // Animate for 4 seconds, then return to default
+      setTimeout(() => {
+        setIsAvatarAnimating(false);
+        setTimeout(() => {
+          setCurrentGesture('default');
+          setGestureInfo(null);
+        }, 1000);
+      }, 4000);
+      
+      return { 
+        status: 'success', 
+        message: `3D Avatar animating gesture: ${gestureName}`,
+        instructions: 'Watch the 3D avatar perform the Pakistani sign language gesture!'
+      };
     } catch (error) {
-      console.error('3D Character launch error:', error);
+      console.error('3D Avatar animation error:', error);
       return { 
         status: 'error', 
-        message: 'Failed to launch 3D character',
-        fallback: 'Character animation not available in web environment' 
+        message: 'Avatar animation failed',
+        fallback: 'Avatar animation system encountered an error' 
       };
     }
   };
