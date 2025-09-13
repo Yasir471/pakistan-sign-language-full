@@ -628,6 +628,19 @@ const App = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Interface */}
           <div className="lg:col-span-2">
+            {/* 3D Avatar Display - Prominent Position */}
+            <div className="mb-6">
+              <h2 className="text-xl font-bold mb-4 text-center">🎭 Real-time 3D Pakistani Sign Language Avatar</h2>
+              <AvatarDisplay 
+                currentGesture={currentGesture}
+                isAnimating={isAvatarAnimating}
+                gestureInfo={gestureInfo}
+              />
+              <p className="text-sm text-gray-600 text-center mt-2">
+                The avatar will animate Pakistani sign language gestures in real-time as you interact with the app
+              </p>
+            </div>
+
             {mode === 'sign-to-speech' && (
               <div className="bg-white rounded-lg shadow-lg p-6">
                 <h2 className="text-xl font-bold mb-4">📹 Real-time Hand Gesture Detection</h2>
