@@ -413,12 +413,8 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus:
-    - "3D Avatar Real-time Animation"
-    - "Speech Recognition (Microphone)"
-  stuck_tasks:
-    - "3D Avatar Real-time Animation"
-    - "Speech Recognition (Microphone)"
+  current_focus: []
+  stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
