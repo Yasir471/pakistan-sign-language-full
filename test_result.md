@@ -276,9 +276,9 @@ backend:
 frontend:
   - task: "3D Avatar Real-time Animation"
     implemented: true
-    working: true
+    working: false
     file: "/app/frontend/src/components/AvatarDisplay.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
