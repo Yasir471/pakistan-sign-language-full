@@ -410,21 +410,12 @@ const App = () => {
                     )}
                   </div>
                 )}
+                <div className="md:col-span-2 bg-green-50 p-3 rounded-lg">
+                  <p className="text-sm text-green-700 font-medium">
+                    👆 Watch the 3D avatar above demonstrate this gesture!
+                  </p>
+                </div>
               </div>
-
-              {result.character_launched ? (
-                <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
-                  <h5 className="font-semibold text-yellow-800 mb-2">🎭 3D Character Status:</h5>
-                  <p className="text-sm text-yellow-700">✅ {result.character.message}</p>
-                  <p className="text-xs text-yellow-600 mt-2">{result.character.instructions}</p>
-                </div>
-              ) : result.character ? (
-                <div className="bg-red-50 border border-red-200 p-4 rounded-lg">
-                  <h5 className="font-semibold text-red-800 mb-2">⚠️ 3D Character Status:</h5>
-                  <p className="text-sm text-red-700">❌ {result.character.message || 'Character launch failed'}</p>
-                  <p className="text-xs text-red-600 mt-2">{result.character.fallback}</p>
-                </div>
-              ) : null}
             </div>
           </div>
         );
