@@ -139,23 +139,42 @@ const App = () => {
         session_id: sessionId
       });
       
-      // If we get a valid gesture response, launch 3D character
-      if (response.data && response.data.gesture) {
-        const characterResponse = await launch3DCharacterForGesture({
-          gesture: response.data.gesture
-        });
-        
-        // Combine the speech recognition result with 3D character launch
-        setResult({
-          ...response.data,
-          character: characterResponse,
-          character_launched: characterResponse.status === 'success'
-        });
+      // Check if the response is successful
+      if (response.data && response.data.success) {
+        // If we get a valid gesture response, launch 3D character
+        if (response.data.gesture) {
+          const characterResponse = await launch3DCharacterForGesture({
+            gesture: response.data.gesture
+          });
+          
+          // Combine the speech recognition result with 3D character launch
+          setResult({
+            type: 'speech_to_sign',
+            recognized_text: response.data.recognized_text,
+            language: response.data.language,
+            gesture: response.data.gesture,
+            meaning: response.data.meaning,
+            message: response.data.message,
+            character: characterResponse,
+            character_launched: characterResponse.status === 'success'
+          });
+        } else {
+          setResult({
+            type: 'speech_to_sign',
+            recognized_text: response.data.recognized_text,
+            language: response.data.language,
+            gesture: null,
+            meaning: null,
+            message: response.data.message,
+            character: null,
+            character_launched: false
+          });
+        }
       } else {
-        setResult(response.data);
+        setError('Speech recognition failed - invalid response');
       }
     } catch (error) {
-      setError(error.response?.data?.error || 'Speech recognition failed');
+      setError(error.response?.data?.detail || error.response?.data?.error || 'Speech recognition failed');
     } finally {
       setIsProcessing(false);
     }
