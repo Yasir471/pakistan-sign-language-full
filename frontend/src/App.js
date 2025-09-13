@@ -443,20 +443,7 @@ const App = () => {
                 <div className="bg-green-50 p-4 rounded-lg">
                   <p className="text-lg mb-2">🤟 <strong>Gesture:</strong> {result.gesture}</p>
                   <p className="text-sm text-green-700">Meaning: {result.meaning}</p>
-                </div>
-              )}
-
-              {result.character_launched ? (
-                <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
-                  <h5 className="font-semibold text-yellow-800 mb-2">🎭 3D Character Status:</h5>
-                  <p className="text-sm text-yellow-700">✅ {result.character.message}</p>
-                  <p className="text-xs text-yellow-600 mt-2">{result.character.instructions}</p>
-                </div>
-              ) : (
-                <div className="bg-red-50 border border-red-200 p-4 rounded-lg">
-                  <h5 className="font-semibold text-red-800 mb-2">⚠️ 3D Character Status:</h5>
-                  <p className="text-sm text-red-700">❌ {result.character?.message || 'Character launch failed'}</p>
-                  <p className="text-xs text-red-600 mt-2">{result.character?.fallback}</p>
+                  <p className="text-sm text-green-600 mt-2">👆 Watch the 3D avatar above demonstrate this gesture!</p>
                 </div>
               )}
             </div>
