@@ -73,15 +73,19 @@ const SignLanguageAvatar = ({ currentGesture, isAnimating }) => {
 
   // Animation loop
   useFrame((state, delta) => {
-    if (isAnimating && currentGesture) {
+    if (isAnimating && currentGesture && gesturePoses[currentGesture]) {
+      console.log('🔄 Animating frame for gesture:', currentGesture);
+      
       setAnimationProgress(prev => {
         const newProgress = prev + delta * 2; // Animation speed
         return newProgress > 1 ? 0 : newProgress; // Loop animation
       });
 
       // Apply gesture poses with smooth interpolation
-      const gesture = gesturePoses[currentGesture] || gesturePoses['default'];
+      const gesture = gesturePoses[currentGesture];
       const t = (Math.sin(animationProgress * Math.PI * 2) + 1) / 2; // Smooth easing
+
+      console.log('📊 Animation progress:', animationProgress, 't:', t);
 
       // Animate arms
       if (leftArmRef.current && gesture.leftArm) {
@@ -103,6 +107,19 @@ const SignLanguageAvatar = ({ currentGesture, isAnimating }) => {
       // Special waving animation for greetings
       if (gesture.wave && headRef.current) {
         headRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 3) * 0.1;
+      }
+    } else if (!isAnimating) {
+      // Reset to default pose when not animating
+      const defaultGesture = gesturePoses['default'];
+      if (leftArmRef.current && defaultGesture.leftArm) {
+        leftArmRef.current.rotation.z = 0.3;
+        leftArmRef.current.position.x = -1.2;
+        leftArmRef.current.position.y = 0;
+      }
+      if (rightArmRef.current && defaultGesture.rightArm) {
+        rightArmRef.current.rotation.z = -0.3;
+        rightArmRef.current.position.x = 1.2;
+        rightArmRef.current.position.y = 0;
       }
     }
   });
