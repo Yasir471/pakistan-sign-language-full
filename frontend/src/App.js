@@ -284,31 +284,56 @@ const App = () => {
     setResult(null);
 
     try {
-      // Actually launch the 3D character story mode
-      const response = await axios.post(`${API}/launch-3d-character`, {
-        mode: 'story',
-        language: storyLanguage,
-        gesture: 'story'
+      // Animate avatar for story mode
+      setCurrentGesture('salam'); // Start with greeting
+      setIsAvatarAnimating(true);
+      setGestureInfo({
+        name: 'Pakistani Story',
+        meaning: `The Sour Grapes in ${storyLanguage}`
       });
+
+      // Simulate story progression with different gestures
+      const storyGestures = ['salam', 'ek', 'paani', 'khana', 'shukriya'];
+      let currentIndex = 0;
+
+      const storyInterval = setInterval(() => {
+        if (currentIndex < storyGestures.length) {
+          setCurrentGesture(storyGestures[currentIndex]);
+          setGestureInfo({
+            name: storyGestures[currentIndex],
+            meaning: `Story element ${currentIndex + 1}`
+          });
+          currentIndex++;
+        } else {
+          clearInterval(storyInterval);
+          setIsAvatarAnimating(false);
+          setCurrentGesture('default');
+          setGestureInfo(null);
+        }
+      }, 3000);
       
-      if (response.data.status === 'success') {
-        setResult({
-          type: 'story',
-          language: storyLanguage,
-          story: {
-            title: storyLanguage === 'urdu' ? 'انگور تو کھٹے ہیں' : 
-                   storyLanguage === 'pashto' ? 'انګور خو تروې دي' : 'The Sour Grapes',
-            message: response.data.message,
-            instructions: response.data.instructions,
-            pid: response.data.pid,
-            status: 'launched'
-          }
-        });
-      } else {
-        setError(response.data.message || 'Failed to launch 3D character');
-      }
+      setResult({
+        type: 'story',
+        language: storyLanguage,
+        story: {
+          title: storyLanguage === 'urdu' ? 'انگور تو کھٹے ہیں' : 
+                 storyLanguage === 'pashto' ? 'انګور خو تروې دي' : 'The Sour Grapes',
+          message: `3D Avatar is telling the Pakistani story in ${storyLanguage}`,
+          instructions: 'Watch the 3D avatar demonstrate the story with Pakistani sign language gestures!',
+          status: 'animating'
+        }
+      });
+
+      // Clean up after 15 seconds
+      setTimeout(() => {
+        clearInterval(storyInterval);
+        setIsAvatarAnimating(false);
+        setCurrentGesture('default');
+        setGestureInfo(null);
+      }, 15000);
+      
     } catch (error) {
-      setError(error.response?.data?.message || 'Story mode failed to start. Please try again.');
+      setError('Story mode failed to start. Please try again.');
     } finally {
       setIsProcessing(false);
     }
