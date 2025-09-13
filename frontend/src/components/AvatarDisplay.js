@@ -12,6 +12,21 @@ const SignLanguageAvatar = ({ currentGesture, isAnimating }) => {
   const rightHandRef = useRef();
   const headRef = useRef();
   const [animationProgress, setAnimationProgress] = useState(0);
+  
+  // Use refs to maintain current state values for useFrame
+  const currentGestureRef = useRef(currentGesture);
+  const isAnimatingRef = useRef(isAnimating);
+  
+  // Update refs when props change
+  useEffect(() => {
+    currentGestureRef.current = currentGesture;
+    isAnimatingRef.current = isAnimating;
+    
+    // Force reset animation progress when starting new animation
+    if (isAnimating && currentGesture && currentGesture !== 'default') {
+      setAnimationProgress(0);
+    }
+  }, [currentGesture, isAnimating]);
 
   // Gesture pose definitions for Pakistani Sign Language
   const gesturePoses = {
