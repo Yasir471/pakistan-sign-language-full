@@ -437,8 +437,10 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus: []
-  stuck_tasks: []
+  current_focus: 
+    - "3D Avatar Real-time Animation"
+  stuck_tasks: 
+    - "3D Avatar Real-time Animation"
   test_all: false
   test_priority: "high_first"
 
