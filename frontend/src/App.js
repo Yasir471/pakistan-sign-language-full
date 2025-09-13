@@ -117,26 +117,31 @@ const App = () => {
   const handleSpeechToSign = async () => {
     setIsProcessing(true);
     setError('');
+    setResult(null);
 
     try {
-      // Mock audio data (in real implementation, you'd record actual audio)
-      const mockAudioData = 'mock_audio_base64_data';
-      
       const response = await axios.post(`${API}/speech-to-sign`, {
-        audio_data: mockAudioData,
         language: language,
         session_id: sessionId
       });
-
-      if (response.data.success) {
-        setResult({
-          type: 'speech_to_sign',
-          data: response.data.result
+      
+      // If we get a valid gesture response, launch 3D character
+      if (response.data && response.data.gesture) {
+        const characterResponse = await launch3DCharacterForGesture({
+          gesture: response.data.gesture
         });
+        
+        // Combine the speech recognition result with 3D character launch
+        setResult({
+          ...response.data,
+          character: characterResponse,
+          character_launched: characterResponse.status === 'success'
+        });
+      } else {
+        setResult(response.data);
       }
     } catch (error) {
-      setError(error.response?.data?.detail || 'Speech to sign conversion failed');
-      console.error('Speech to sign error:', error);
+      setError(error.response?.data?.error || 'Speech recognition failed');
     } finally {
       setIsProcessing(false);
     }
