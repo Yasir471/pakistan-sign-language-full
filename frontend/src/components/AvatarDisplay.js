@@ -382,32 +382,55 @@ const Hand = ({ gesture, side }) => {
     <group ref={handRef}>
       {/* Palm */}
       <mesh>
-        <boxGeometry args={[0.15, 0.08, 0.2]} />
-        <meshStandardMaterial color="#DCAA7B" />
+        <sphereGeometry args={[0.08, 8, 8]} />
+        <meshStandardMaterial color="#F4C2A1" roughness={0.7} />
       </mesh>
       
-      {/* Fingers */}
-      {[0, 1, 2, 3].map(i => (
-        <group key={i} position={[(-0.06 + i * 0.04), 0, 0.12]}>
-          {/* Finger segments */}
-          <mesh position={[0, 0, 0.04]} rotation={[config.curl * 0.5, 0, config.spread * (i - 1.5)]}>
-            <cylinderGeometry args={[0.015, 0.02, 0.08, 6]} />
-            <meshStandardMaterial color="#DCAA7B" />
-          </mesh>
-          <mesh position={[0, 0, 0.08]} rotation={[config.curl, 0, config.spread * (i - 1.5)]}>
-            <cylinderGeometry args={[0.01, 0.015, 0.06, 6]} />
-            <meshStandardMaterial color="#DCAA7B" />
-          </mesh>
-        </group>
-      ))}
-      
+      {/* Fingers based on gesture configuration */}
       {/* Thumb */}
-      <group position={[0.08, 0, 0.05]} rotation={[0, 0, side === 'left' ? 0.5 : -0.5]}>
-        <mesh>
-          <cylinderGeometry args={[0.015, 0.02, 0.07, 6]} />
-          <meshStandardMaterial color="#DCAA7B" />
-        </mesh>
-      </group>
+      <mesh 
+        position={side === 'left' ? [-0.06, 0.02, 0.06] : [0.06, 0.02, 0.06]} 
+        rotation={[0, 0, side === 'left' ? -config.spread : config.spread]}
+      >
+        <cylinderGeometry args={[0.015, 0.02, 0.05, 6]} />
+        <meshStandardMaterial color="#F4C2A1" roughness={0.7} />
+      </mesh>
+      
+      {/* Index Finger */}
+      <mesh 
+        position={[0, 0.08, 0]} 
+        rotation={[config.index ? -config.curl : -config.curl * 0.5, 0, 0]}
+      >
+        <cylinderGeometry args={[0.012, 0.015, 0.06, 6]} />
+        <meshStandardMaterial color="#F4C2A1" roughness={0.7} />
+      </mesh>
+      
+      {/* Middle Finger */}
+      <mesh 
+        position={[0.02, 0.08, 0]} 
+        rotation={[config.middle ? -config.curl : -config.curl * 0.7, 0, 0]}
+      >
+        <cylinderGeometry args={[0.01, 0.013, 0.07, 6]} />
+        <meshStandardMaterial color="#F4C2A1" roughness={0.7} />
+      </mesh>
+      
+      {/* Ring Finger */}
+      <mesh 
+        position={[0.04, 0.07, 0]} 
+        rotation={[config.ring ? -config.curl : -config.curl * 0.8, 0, 0]}
+      >
+        <cylinderGeometry args={[0.009, 0.012, 0.06, 6]} />
+        <meshStandardMaterial color="#F4C2A1" roughness={0.7} />
+      </mesh>
+      
+      {/* Pinky */}
+      <mesh 
+        position={[0.055, 0.05, 0]} 
+        rotation={[-config.curl * 0.9, 0, 0]}
+      >
+        <cylinderGeometry args={[0.008, 0.01, 0.05, 6]} />
+        <meshStandardMaterial color="#F4C2A1" roughness={0.7} />
+      </mesh>
     </group>
   );
 };
