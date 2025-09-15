@@ -160,33 +160,117 @@ const SignLanguageAvatar = ({ currentGesture, isAnimating }) => {
 
   return (
     <group ref={avatarRef}>
-      {/* Head */}
+      {/* Enhanced Head - matching uploaded character */}
       <group ref={headRef} position={[0, 2.5, 0]}>
+        {/* Face with skin tone matching character */}
         <mesh>
-          <sphereGeometry args={[0.3, 16, 16]} />
-          <meshStandardMaterial color="#DCAA7B" />
+          <sphereGeometry args={[0.35, 20, 20]} />
+          <meshStandardMaterial 
+            color="#F4C2A1" 
+            roughness={0.6}
+            metalness={0.1}
+          />
         </mesh>
+        
         {/* Eyes */}
-        <mesh position={[-0.1, 0.05, 0.25]}>
-          <sphereGeometry args={[0.03, 8, 8]} />
-          <meshStandardMaterial color="#000" />
+        <mesh position={[-0.12, 0.08, 0.28]}>
+          <sphereGeometry args={[0.04, 8, 8]} />
+          <meshStandardMaterial color="#2C3E50" />
         </mesh>
-        <mesh position={[0.1, 0.05, 0.25]}>
-          <sphereGeometry args={[0.03, 8, 8]} />
-          <meshStandardMaterial color="#000" />
+        <mesh position={[0.12, 0.08, 0.28]}>
+          <sphereGeometry args={[0.04, 8, 8]} />
+          <meshStandardMaterial color="#2C3E50" />
         </mesh>
+        
+        {/* Glasses - matching the uploaded character */}
+        <group position={[0, 0.08, 0.32]}>
+          {/* Left lens */}
+          <mesh position={[-0.12, 0, 0]}>
+            <ringGeometry args={[0.08, 0.11, 16]} />
+            <meshStandardMaterial color="#2C3E50" transparent opacity={0.8} />
+          </mesh>
+          {/* Right lens */}
+          <mesh position={[0.12, 0, 0]}>
+            <ringGeometry args={[0.08, 0.11, 16]} />
+            <meshStandardMaterial color="#2C3E50" transparent opacity={0.8} />
+          </mesh>
+          {/* Bridge */}
+          <mesh position={[0, 0, 0]} scale={[0.24, 0.02, 0.02]}>
+            <boxGeometry />
+            <meshStandardMaterial color="#2C3E50" />
+          </mesh>
+          {/* Left temple */}
+          <mesh position={[-0.2, 0, -0.1]} rotation={[0, -0.3, 0]} scale={[0.15, 0.02, 0.02]}>
+            <boxGeometry />
+            <meshStandardMaterial color="#2C3E50" />
+          </mesh>
+          {/* Right temple */}
+          <mesh position={[0.2, 0, -0.1]} rotation={[0, 0.3, 0]} scale={[0.15, 0.02, 0.02]}>
+            <boxGeometry />
+            <meshStandardMaterial color="#2C3E50" />
+          </mesh>
+        </group>
+        
+        {/* Hair - dark brown/black like the character */}
+        <mesh position={[0, 0.15, -0.05]}>
+          <sphereGeometry args={[0.38, 16, 10, 0, Math.PI * 2, 0, Math.PI * 0.7]} />
+          <meshStandardMaterial color="#2C3E50" roughness={0.8} />
+        </mesh>
+        
         {/* Mouth */}
-        <mesh position={[0, -0.08, 0.25]} rotation={[0, 0, 0]}>
-          <cylinderGeometry args={[0.05, 0.05, 0.02, 8]} />
-          <meshStandardMaterial color="#8B4513" />
+        <mesh position={[0, -0.1, 0.28]} rotation={[Math.PI/2, 0, 0]}>
+          <cylinderGeometry args={[0.03, 0.03, 0.02, 8]} />
+          <meshStandardMaterial color="#CD5C5C" />
         </mesh>
       </group>
 
-      {/* Body */}
-      <mesh position={[0, 1.5, 0]}>
-        <cylinderGeometry args={[0.4, 0.5, 1.5, 8]} />
-        <meshStandardMaterial color="#4A90E2" />
-      </mesh>
+      {/* Enhanced Body - Professional attire like uploaded character */}
+      <group position={[0, 1.5, 0]}>
+        {/* Torso - Light colored shirt */}
+        <mesh>
+          <cylinderGeometry args={[0.45, 0.55, 1.6, 12]} />
+          <meshStandardMaterial 
+            color="#F8F8FF" 
+            roughness={0.5}
+          />
+        </mesh>
+        
+        {/* Light Blue Tie - matching the uploaded character */}
+        <mesh position={[0, 0.2, 0.52]} scale={[1, 1.8, 1]}>
+          <boxGeometry args={[0.12, 0.7, 0.03]} />
+          <meshStandardMaterial 
+            color="#87CEEB" 
+            roughness={0.4}
+            metalness={0.1}
+          />
+        </mesh>
+        
+        {/* Shirt Collar */}
+        <group position={[0, 0.6, 0.45]}>
+          <mesh position={[-0.15, 0, 0]} rotation={[0.3, 0.2, 0]}>
+            <boxGeometry args={[0.25, 0.2, 0.05]} />
+            <meshStandardMaterial color="#FFFFFF" roughness={0.3} />
+          </mesh>
+          <mesh position={[0.15, 0, 0]} rotation={[0.3, -0.2, 0]}>
+            <boxGeometry args={[0.25, 0.2, 0.05]} />
+            <meshStandardMaterial color="#FFFFFF" roughness={0.3} />
+          </mesh>
+        </group>
+        
+        {/* Shirt buttons */}
+        <mesh position={[0, 0.3, 0.53]}>
+          <cylinderGeometry args={[0.02, 0.02, 0.01, 8]} />
+          <meshStandardMaterial color="#E0E0E0" />
+        </mesh>
+        <mesh position={[0, 0.1, 0.53]}>
+          <cylinderGeometry args={[0.02, 0.02, 0.01, 8]} />
+          <meshStandardMaterial color="#E0E0E0" />
+        </mesh>
+        <mesh position={[0, -0.1, 0.53]}>
+          <cylinderGeometry args={[0.02, 0.02, 0.01, 8]} />
+          <meshStandardMaterial color="#E0E0E0" />
+        </mesh>
+      </group>
 
       {/* Left Arm */}
       <group ref={leftArmRef} position={[-1.2, 2, 0]}>
