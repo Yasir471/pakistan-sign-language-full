@@ -308,24 +308,40 @@ const SignLanguageAvatar = ({ currentGesture, isAnimating }) => {
         </group>
       </group>
 
-      {/* Legs */}
-      <mesh position={[-0.2, 0.5, 0]}>
-        <cylinderGeometry args={[0.12, 0.15, 1, 8]} />
-        <meshStandardMaterial color="#2C3E50" />
-      </mesh>
-      <mesh position={[0.2, 0.5, 0]}>
-        <cylinderGeometry args={[0.12, 0.15, 1, 8]} />
-        <meshStandardMaterial color="#2C3E50" />
-      </mesh>
+      {/* Enhanced Legs - Dark pants matching the character */}
+      <group position={[0, 0.5, 0]}>
+        <mesh position={[-0.22, 0, 0]}>
+          <cylinderGeometry args={[0.14, 0.16, 1.2, 10]} />
+          <meshStandardMaterial 
+            color="#2C3E50" 
+            roughness={0.7}
+          />
+        </mesh>
+        <mesh position={[0.22, 0, 0]}>
+          <cylinderGeometry args={[0.14, 0.16, 1.2, 10]} />
+          <meshStandardMaterial 
+            color="#2C3E50" 
+            roughness={0.7}
+          />
+        </mesh>
+      </group>
 
-      {/* Feet */}
-      <mesh position={[-0.2, -0.1, 0.1]}>
-        <boxGeometry args={[0.15, 0.1, 0.25]} />
-        <meshStandardMaterial color="#000" />
+      {/* Enhanced Shoes - Professional black shoes */}
+      <mesh position={[-0.22, -0.15, 0.12]}>
+        <boxGeometry args={[0.18, 0.12, 0.32]} />
+        <meshStandardMaterial 
+          color="#1B2631" 
+          roughness={0.2}
+          metalness={0.3}
+        />
       </mesh>
-      <mesh position={[0.2, -0.1, 0.1]}>
-        <boxGeometry args={[0.15, 0.1, 0.25]} />
-        <meshStandardMaterial color="#000" />
+      <mesh position={[0.22, -0.15, 0.12]}>
+        <boxGeometry args={[0.18, 0.12, 0.32]} />
+        <meshStandardMaterial 
+          color="#1B2631" 
+          roughness={0.2}
+          metalness={0.3}
+        />
       </mesh>
     </group>
   );
