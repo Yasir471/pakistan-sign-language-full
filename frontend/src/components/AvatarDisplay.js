@@ -513,13 +513,46 @@ const Hand = ({ gesture, side }) => {
 
   const getFingerConfig = () => {
     const poses = {
+      // Basic communication
       'salam': 'open',
       'shukriya': 'open', 
+      'please': 'prayer',
+      'sorry': 'open',
+      
+      // Daily needs
       'paani': side === 'left' ? 'cup' : 'pour',
       'khana': side === 'left' ? 'open' : 'eating',
+      'eat': 'eating',
+      'drink': 'cup',
+      'more': 'cup',
+      
+      // Numbers
       'ek': side === 'left' ? 'one' : 'fist',
       'do': side === 'left' ? 'two' : 'fist',
-      'teen': side === 'left' ? 'three' : 'fist'
+      'teen': side === 'left' ? 'three' : 'fist',
+      'char': side === 'left' ? 'four' : 'fist',
+      'panch': side === 'left' ? 'open' : 'fist',
+      
+      // Advanced gestures from reference images
+      'ok': 'ok',
+      'stop': 'stop',
+      'victory': 'victory',
+      'call': 'call',
+      'good_luck': 'thumbs_up',
+      
+      // Family and relationships  
+      'maa': 'open',
+      'baap': 'open',
+      'bhai': 'open',
+      'behan': 'open',
+      
+      // Objects and places
+      'ghar': 'open',
+      'kitab': 'open',
+      'kaam': 'fist',
+      'dost': 'open',
+      'madad': 'open',
+      'khuda_hafiz': 'open'
     };
     return fingerConfigs[poses[gesture]] || fingerConfigs['relaxed'];
   };
