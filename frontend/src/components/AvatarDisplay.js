@@ -4,7 +4,7 @@ import { Text, OrbitControls } from '@react-three/drei';
 import { TextureLoader } from 'three';
 import * as THREE from 'three';
 
-// 3D Avatar Component
+// Enhanced 3D Avatar Component with User's Character Model
 const SignLanguageAvatar = ({ currentGesture, isAnimating }) => {
   const avatarRef = useRef();
   const leftArmRef = useRef();
@@ -17,6 +17,9 @@ const SignLanguageAvatar = ({ currentGesture, isAnimating }) => {
   // Use refs to maintain current state values for useFrame
   const currentGestureRef = useRef(currentGesture);
   const isAnimatingRef = useRef(isAnimating);
+  
+  // Load the user's 3D character texture
+  const characterTexture = useLoader(TextureLoader, 'https://customer-assets.emergentagent.com/job_signlingo-3/artifacts/ezq9njgt_images.jpg');
   
   // Update refs when props change
   useEffect(() => {
