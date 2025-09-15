@@ -355,51 +355,91 @@ const App = () => {
     setResult(null);
 
     try {
-      // Animate avatar for story mode with multiple gestures
-      const storyGestures = ['salam', 'ek', 'paani', 'khana', 'shukriya'];
-      let currentIndex = 0;
+      // Define story gestures sequence for "The Sour Grapes"
+      const storyGestureSequence = [
+        { gesture: 'salam', meaning: 'Hello (Story begins)', duration: 3000 },
+        { gesture: 'ek', meaning: 'Once (upon a time)', duration: 3000 },
+        { gesture: 'angoor', meaning: 'Grapes', duration: 4000 },
+        { gesture: 'darakht', meaning: 'Tree', duration: 3000 },
+        { gesture: 'looking', meaning: 'Looking up', duration: 3000 },
+        { gesture: 'madad', meaning: 'Trying to reach', duration: 4000 },
+        { gesture: 'nahin', meaning: 'Cannot reach', duration: 3000 },
+        { gesture: 'bura', meaning: 'Sour/Bad', duration: 4000 },
+        { gesture: 'walking', meaning: 'Walking away', duration: 3000 },
+        { gesture: 'thinking', meaning: 'Moral lesson', duration: 4000 },
+        { gesture: 'shukriya', meaning: 'Thank you (Story ends)', duration: 3000 }
+      ];
 
-      // Start with first gesture
-      await launch3DCharacterForGesture({ 
-        gesture: storyGestures[0], 
-        meaning: `Story in ${storyLanguage} - Part 1` 
-      });
-
-      // Story progression with different gestures
-      const storyInterval = setInterval(async () => {
-        currentIndex++;
-        if (currentIndex < storyGestures.length) {
-          await launch3DCharacterForGesture({
-            gesture: storyGestures[currentIndex],
-            meaning: `Story Part ${currentIndex + 1}`
-          });
-        } else {
-          clearInterval(storyInterval);
+      // Story text based on language
+      const storyTexts = {
+        urdu: {
+          title: 'انگور تو کھٹے ہیں',
+          content: 'ایک بار ایک لومڑی نے درخت پر انگور دیکھے۔ وہ اُچھل کر انگور توڑنے کی کوشش کرتا رہا لیکن ناکام رہا۔ آخر میں اس نے کہا "یہ انگور تو کھٹے ہیں"۔',
+          moral: 'سبق: جو چیز ہمیں نہ مل سکے، اسے برا کہنا آسان ہے۔'
+        },
+        pashto: {
+          title: 'انګور خو تروې دي',
+          content: 'یو ځل یوه پیشوګه په ونه کې انگور وکښل۔ هغه هڅه وکړه چې پورته شي او انگور واخلي مګر بریالی نشو۔ په پای کې یې وویل "دا انگور خو تروې دي"۔',
+          moral: 'پند: دا اسانه دی چې هغه شی بد ووایو چې موږ ته نشي ترلاسه کولی۔'
+        },
+        english: {
+          title: 'The Sour Grapes',
+          content: 'Once a fox saw some grapes hanging high on a tree. He tried jumping to reach them but failed repeatedly. Finally, he said "Those grapes are sour anyway".',
+          moral: 'Moral: It is easy to despise what you cannot get.'
         }
-      }, 4500); // Slightly longer than gesture duration to allow transitions
+      };
+
+      const selectedStory = storyTexts[storyLanguage] || storyTexts.english;
       
-      setResult({
-        type: 'story',
-        language: storyLanguage,
-        story: {
-          title: storyLanguage === 'urdu' ? 'انگور تو کھٹے ہیں' : 
-                 storyLanguage === 'pashto' ? 'انګور خو تروې دي' : 'The Sour Grapes',
-          message: `3D Avatar is telling the Pakistani story in ${storyLanguage} with animated gestures`,
-          instructions: 'Watch the 3D avatar demonstrate the story with a sequence of Pakistani sign language gestures!',
-          status: 'animating',
-          gestures: storyGestures,
-          duration: storyGestures.length * 4.5 // Total story duration
+      // Start the story animation sequence
+      let currentGestureIndex = 0;
+      
+      const playNextGesture = async () => {
+        if (currentGestureIndex < storyGestureSequence.length) {
+          const currentStep = storyGestureSequence[currentGestureIndex];
+          
+          // Animate the gesture
+          await launch3DCharacterForGesture({
+            gesture: currentStep.gesture,
+            meaning: currentStep.meaning
+          });
+          
+          // Update result with current story progress
+          setResult({
+            type: 'pakistani_story',
+            language: storyLanguage,
+            title: selectedStory.title,
+            content: selectedStory.content,
+            moral: selectedStory.moral,
+            currentGesture: currentStep.gesture,
+            currentMeaning: currentStep.meaning,
+            progress: `${currentGestureIndex + 1}/${storyGestureSequence.length}`,
+            message: `Story progress: ${currentStep.meaning}`
+          });
+          
+          currentGestureIndex++;
+          
+          // Schedule next gesture
+          setTimeout(() => {
+            playNextGesture();
+          }, currentStep.duration);
+        } else {
+          // Story completed
+          setResult(prev => ({
+            ...prev,
+            message: 'Story completed! The 3D avatar demonstrated the complete Pakistani story.',
+            completed: true
+          }));
+          setIsProcessing(false);
         }
-      });
-
-      // Clean up after story completes
-      setTimeout(() => {
-        clearInterval(storyInterval);
-      }, storyGestures.length * 4500);
+      };
+      
+      // Start the story
+      playNextGesture();
       
     } catch (error) {
-      setError('Story mode failed to start. Please try again.');
-    } finally {
+      console.error('Story mode error:', error);
+      setError('Failed to start Pakistani story mode. Please try again.');
       setIsProcessing(false);
     }
   };
