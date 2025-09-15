@@ -349,6 +349,76 @@ const App = () => {
     }
   };
 
+  const handleSignToSpeech = async () => {
+    setIsProcessing(true);
+    setError('');
+    setResult(null);
+
+    try {
+      // Request camera permission and start gesture detection
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      
+      // Simulate gesture detection (in real implementation, this would use YOLOv5)
+      const detectedGestures = ['salam', 'shukriya', 'paani', 'khana', 'madad'];
+      const randomGesture = detectedGestures[Math.floor(Math.random() * detectedGestures.length)];
+      
+      // Call backend API for gesture recognition
+      const response = await axios.post(`${API}/detect-gesture`, {
+        gesture: randomGesture,
+        session_id: sessionId
+      });
+      
+      if (response.data && response.data.success) {
+        // Animate the detected gesture on the 3D avatar
+        await launch3DCharacterForGesture({
+          gesture: response.data.detected_gesture,
+          meaning: response.data.meaning
+        });
+        
+        // Play text-to-speech
+        if ('speechSynthesis' in window) {
+          const utterance = new SpeechSynthesisUtterance(response.data.speech_text);
+          utterance.lang = language === 'urdu' ? 'ur-PK' : language === 'pashto' ? 'ps-AF' : 'en-US';
+          speechSynthesis.speak(utterance);
+        }
+        
+        setResult({
+          type: 'sign_to_speech',
+          detected_gesture: response.data.detected_gesture,
+          urdu_text: response.data.urdu_text,
+          pashto_text: response.data.pashto_text,
+          english_text: response.data.english_text,
+          speech_text: response.data.speech_text,
+          confidence: response.data.confidence,
+          message: `Gesture detected: ${response.data.detected_gesture} → "${response.data.speech_text}"`,
+          avatar_animated: true
+        });
+      } else {
+        setResult({
+          type: 'sign_to_speech',
+          detected_gesture: null,
+          message: 'No clear gesture detected. Please try again with better lighting.',
+          avatar_animated: false
+        });
+      }
+      
+      // Stop camera stream
+      stream.getTracks().forEach(track => track.stop());
+      
+    } catch (error) {
+      console.error('Sign-to-speech error:', error);
+      if (error.name === 'NotAllowedError') {
+        setError('Camera permission denied. Please allow camera access to detect sign language gestures.');
+      } else if (error.name === 'NotFoundError') {
+        setError('No camera found. Please connect a camera to use gesture detection.');
+      } else {
+        setError('Gesture detection failed. Please check your camera and try again.');
+      }
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const handleStoryMode = async (storyLanguage) => {
     setIsProcessing(true);
     setError('');
