@@ -295,11 +295,11 @@ const SignLanguageAvatar = ({ currentGesture, isAnimating }) => {
 
   return (
     <group ref={avatarRef}>
-      {/* Enhanced Head - matching uploaded character */}
+      {/* Enhanced Head - matching uploaded character exactly */}
       <group ref={headRef} position={[0, 2.5, 0]}>
-        {/* Face with skin tone matching uploaded character */}
+        {/* Face with better skin tone */}
         <mesh>
-          <sphereGeometry args={[0.35, 20, 20]} />
+          <sphereGeometry args={[0.45, 32, 32]} />
           <meshStandardMaterial 
             color="#F4C2A1" 
             roughness={0.6}
@@ -307,55 +307,80 @@ const SignLanguageAvatar = ({ currentGesture, isAnimating }) => {
           />
         </mesh>
         
-        {/* Eyes */}
-        <mesh position={[-0.12, 0.08, 0.28]}>
-          <sphereGeometry args={[0.04, 8, 8]} />
+        {/* Eyes - more prominent */}
+        <mesh position={[-0.15, 0.1, 0.35]}>
+          <sphereGeometry args={[0.05, 8, 8]} />
           <meshStandardMaterial color="#2C3E50" />
         </mesh>
-        <mesh position={[0.12, 0.08, 0.28]}>
-          <sphereGeometry args={[0.04, 8, 8]} />
+        <mesh position={[0.15, 0.1, 0.35]}>
+          <sphereGeometry args={[0.05, 8, 8]} />
           <meshStandardMaterial color="#2C3E50" />
         </mesh>
         
-        {/* Glasses - matching the uploaded character */}
-        <group position={[0, 0.08, 0.32]}>
-          {/* Left lens */}
-          <mesh position={[-0.12, 0, 0]}>
-            <ringGeometry args={[0.08, 0.11, 16]} />
-            <meshStandardMaterial color="#2C3E50" transparent opacity={0.8} />
+        {/* Enhanced Glasses - exactly like uploaded character */}
+        <group position={[0, 0.1, 0.4]}>
+          {/* Left lens frame */}
+          <mesh position={[-0.18, 0, 0]}>
+            <torusGeometry args={[0.12, 0.02, 8, 16]} />
+            <meshStandardMaterial color="#1B2631" roughness={0.2} metalness={0.7} />
           </mesh>
-          {/* Right lens */}
-          <mesh position={[0.12, 0, 0]}>
-            <ringGeometry args={[0.08, 0.11, 16]} />
-            <meshStandardMaterial color="#2C3E50" transparent opacity={0.8} />
+          {/* Right lens frame */}
+          <mesh position={[0.18, 0, 0]}>
+            <torusGeometry args={[0.12, 0.02, 8, 16]} />
+            <meshStandardMaterial color="#1B2631" roughness={0.2} metalness={0.7} />
           </mesh>
           {/* Bridge */}
-          <mesh position={[0, 0, 0]} scale={[0.24, 0.02, 0.02]}>
+          <mesh position={[0, 0, 0]} scale={[0.3, 0.03, 0.03]}>
             <boxGeometry />
-            <meshStandardMaterial color="#2C3E50" />
+            <meshStandardMaterial color="#1B2631" roughness={0.2} />
           </mesh>
           {/* Left temple */}
-          <mesh position={[-0.2, 0, -0.1]} rotation={[0, -0.3, 0]} scale={[0.15, 0.02, 0.02]}>
+          <mesh position={[-0.28, 0, -0.15]} rotation={[0, -0.4, 0]} scale={[0.2, 0.03, 0.03]}>
             <boxGeometry />
-            <meshStandardMaterial color="#2C3E50" />
+            <meshStandardMaterial color="#1B2631" roughness={0.2} />
           </mesh>
           {/* Right temple */}
-          <mesh position={[0.2, 0, -0.1]} rotation={[0, 0.3, 0]} scale={[0.15, 0.02, 0.02]}>
+          <mesh position={[0.28, 0, -0.15]} rotation={[0, 0.4, 0]} scale={[0.2, 0.03, 0.03]}>
             <boxGeometry />
-            <meshStandardMaterial color="#2C3E50" />
+            <meshStandardMaterial color="#1B2631" roughness={0.2} />
+          </mesh>
+          {/* Lens glass effect */}
+          <mesh position={[-0.18, 0, 0.01]}>
+            <circleGeometry args={[0.11, 16]} />
+            <meshStandardMaterial color="#E8F4FD" transparent opacity={0.3} />
+          </mesh>
+          <mesh position={[0.18, 0, 0.01]}>
+            <circleGeometry args={[0.11, 16]} />
+            <meshStandardMaterial color="#E8F4FD" transparent opacity={0.3} />
           </mesh>
         </group>
         
-        {/* Hair - dark brown/black like the character */}
-        <mesh position={[0, 0.15, -0.05]}>
-          <sphereGeometry args={[0.38, 16, 10, 0, Math.PI * 2, 0, Math.PI * 0.7]} />
-          <meshStandardMaterial color="#2C3E50" roughness={0.8} />
+        {/* Dark hair - exactly like uploaded character */}
+        <mesh position={[0, 0.2, -0.1]}>
+          <sphereGeometry args={[0.48, 16, 10, 0, Math.PI * 2, 0, Math.PI * 0.65]} />
+          <meshStandardMaterial color="#1B2631" roughness={0.8} />
+        </mesh>
+        
+        {/* Hair sides */}
+        <mesh position={[-0.35, 0.05, 0]} scale={[0.8, 1.2, 0.9]}>
+          <sphereGeometry args={[0.15, 8, 8]} />
+          <meshStandardMaterial color="#1B2631" roughness={0.8} />
+        </mesh>
+        <mesh position={[0.35, 0.05, 0]} scale={[0.8, 1.2, 0.9]}>
+          <sphereGeometry args={[0.15, 8, 8]} />
+          <meshStandardMaterial color="#1B2631" roughness={0.8} />
         </mesh>
         
         {/* Mouth */}
-        <mesh position={[0, -0.1, 0.28]} rotation={[Math.PI/2, 0, 0]}>
-          <cylinderGeometry args={[0.03, 0.03, 0.02, 8]} />
+        <mesh position={[0, -0.15, 0.35]} rotation={[Math.PI/2, 0, 0]}>
+          <cylinderGeometry args={[0.04, 0.04, 0.02, 8]} />
           <meshStandardMaterial color="#CD5C5C" />
+        </mesh>
+        
+        {/* Nose */}
+        <mesh position={[0, -0.05, 0.4]} scale={[0.8, 1.2, 1.0]}>
+          <sphereGeometry args={[0.03, 8, 8]} />
+          <meshStandardMaterial color="#F4C2A1" roughness={0.6} />
         </mesh>
       </group>
 
