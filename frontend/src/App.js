@@ -616,6 +616,63 @@ const App = () => {
           </div>
         );
 
+      case 'sign_to_speech':
+        return (
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h3 className="text-xl font-bold mb-4 text-blue-600">👋 Sign to Speech Result</h3>
+            <div className="space-y-4">
+              {result.detected_gesture ? (
+                <>
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <p className="text-lg mb-2">🤟 <strong>Detected Gesture:</strong> {result.detected_gesture}</p>
+                    <p className="text-sm text-blue-700">Confidence: {result.confidence ? (result.confidence * 100).toFixed(1) + '%' : 'N/A'}</p>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {result.urdu_text && (
+                      <div className="bg-green-50 p-3 rounded-lg">
+                        <p className="text-sm text-gray-600 mb-1">Urdu</p>
+                        <p className="text-lg font-semibold text-blue-600 urdu-text">{result.urdu_text}</p>
+                      </div>
+                    )}
+                    {result.pashto_text && (
+                      <div className="bg-purple-50 p-3 rounded-lg">
+                        <p className="text-sm text-gray-600 mb-1">Pashto</p>
+                        <p className="text-lg font-semibold text-purple-600 pashto-text">{result.pashto_text}</p>
+                      </div>
+                    )}
+                    {result.english_text && (
+                      <div className="bg-gray-50 p-3 rounded-lg">
+                        <p className="text-sm text-gray-600 mb-1">English</p>
+                        <p className="text-lg font-semibold text-gray-800">{result.english_text}</p>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {result.speech_text && (
+                    <div className="bg-yellow-50 p-4 rounded-lg">
+                      <p className="text-lg mb-2">🔊 <strong>Speech Output:</strong> "{result.speech_text}"</p>
+                      <p className="text-sm text-yellow-700">Text-to-speech has been played automatically</p>
+                    </div>
+                  )}
+                  
+                  {result.avatar_animated && (
+                    <div className="bg-green-50 p-4 rounded-lg">
+                      <p className="text-sm text-green-700 font-medium">
+                        👆 Watch the 3D avatar above demonstrate this gesture!
+                      </p>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="bg-yellow-50 p-4 rounded-lg">
+                  <p className="text-lg text-yellow-800">{result.message}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+
       case 'text_to_sign':
         return (
           <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
