@@ -158,7 +158,7 @@ const SignLanguageAvatar = ({ currentGesture, isAnimating }) => {
     <group ref={avatarRef}>
       {/* Enhanced Head - matching uploaded character */}
       <group ref={headRef} position={[0, 2.5, 0]}>
-        {/* Face with skin tone matching character */}
+        {/* Face with skin tone matching uploaded character */}
         <mesh>
           <sphereGeometry args={[0.35, 20, 20]} />
           <meshStandardMaterial 
