@@ -493,9 +493,22 @@ const Hand = ({ gesture, side }) => {
     'one': { spread: 0.1, curl: 0.8, index: true },
     'two': { spread: 0.15, curl: 0.8, index: true, middle: true },
     'three': { spread: 0.15, curl: 0.8, index: true, middle: true, ring: true },
+    'four': { spread: 0.18, curl: 0.1, index: true, middle: true, ring: true, pinky: true },
     'cup': { spread: 0.05, curl: 0.4 },
     'pour': { spread: 0.1, curl: 0.2 },
-    'eating': { spread: 0.08, curl: 0.5 }
+    'eating': { spread: 0.08, curl: 0.5 },
+    
+    // New finger configurations from reference images
+    'ok': { spread: 0.1, curl: 0.9, thumb_index_circle: true }, // Thumb and index form circle
+    'victory': { spread: 0.25, curl: 0.8, index: true, middle: true }, // V sign with index and middle
+    'call': { spread: 0.12, curl: 0.7, thumb: true, pinky: true }, // Phone gesture - thumb and pinky extended
+    'thumbs_up': { spread: 0.05, curl: 1.0, thumb_up: true }, // Thumbs up - only thumb extended upward  
+    'stop': { spread: 0.3, curl: 0, palm_forward: true }, // Open palm facing forward
+    'pointing': { spread: 0.1, curl: 0.9, index: true }, // Index finger pointing
+    'peace': { spread: 0.2, curl: 0.8, index: true, middle: true }, // Peace sign
+    'prayer': { spread: 0.05, curl: 0.2, palms_together: true }, // Hands together in prayer
+    'applause': { spread: 0.15, curl: 0.1, clapping: true }, // Clapping hands
+    'hold': { spread: 0.08, curl: 0.6, grasping: true } // Holding something
   };
 
   const getFingerConfig = () => {
