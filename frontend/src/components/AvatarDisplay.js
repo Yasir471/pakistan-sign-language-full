@@ -78,6 +78,145 @@ const SignLanguageAvatar = ({ currentGesture, isAnimating }) => {
       rightArm: { rotation: [0, 0, -0.3], position: [1.0, 0, 0] },
       leftHand: { rotation: [0, 0, 0], fingers: 'three' },
       rightHand: { rotation: [0, 0, 0], fingers: 'fist' }
+    },
+    
+    // New gestures from uploaded reference images
+    'please': { // Hands together in prayer/pleading position
+      leftArm: { rotation: [0.2, 0.3, 0.6], position: [-0.3, 0.2, 0] },
+      rightArm: { rotation: [0.2, -0.3, -0.6], position: [0.3, 0.2, 0] },
+      leftHand: { rotation: [0, 0.5, 0], fingers: 'open' },
+      rightHand: { rotation: [0, -0.5, 0], fingers: 'open' }
+    },
+    'sorry': { // One hand to chest, apologetic gesture
+      leftArm: { rotation: [0.4, 0.2, 0.5], position: [-0.4, 0.4, 0] },
+      rightArm: { rotation: [0.1, 0, -0.2], position: [1.0, 0, 0] },
+      leftHand: { rotation: [0, 0, 0.2], fingers: 'open' },
+      rightHand: { rotation: [0, 0, 0], fingers: 'relaxed' }
+    },
+    'eat': { // Hand to mouth eating gesture
+      leftArm: { rotation: [1.5, 0.3, 0.9], position: [-0.1, 0.9, 0] },
+      rightArm: { rotation: [0.1, 0, -0.2], position: [1.0, 0, 0] },
+      leftHand: { rotation: [0.3, 0, 0], fingers: 'eating' },
+      rightHand: { rotation: [0, 0, 0], fingers: 'relaxed' }
+    },
+    'drink': { // Hand to mouth drinking gesture  
+      leftArm: { rotation: [1.3, 0.2, 0.7], position: [-0.1, 0.7, 0] },
+      rightArm: { rotation: [0.1, 0, -0.2], position: [1.0, 0, 0] },
+      leftHand: { rotation: [0.2, 0, 0], fingers: 'cup' },
+      rightHand: { rotation: [0, 0, 0], fingers: 'relaxed' }
+    },
+    'more': { // Fingertips touching gesture
+      leftArm: { rotation: [0.7, 0.4, 0.9], position: [-0.2, 0.5, 0] },
+      rightArm: { rotation: [0.7, -0.4, -0.9], position: [0.2, 0.5, 0] },
+      leftHand: { rotation: [0, 0.3, 0], fingers: 'cup' },
+      rightHand: { rotation: [0, -0.3, 0], fingers: 'cup' }
+    },
+    'ok': { // OK sign - thumb and index forming circle
+      leftArm: { rotation: [0.5, 0.2, 0.7], position: [-0.5, 0.3, 0] },
+      rightArm: { rotation: [0.1, 0, -0.2], position: [1.0, 0, 0] },
+      leftHand: { rotation: [0, 0, 0], fingers: 'ok' },
+      rightHand: { rotation: [0, 0, 0], fingers: 'relaxed' }
+    },
+    'stop': { // Stop - palm facing outward
+      leftArm: { rotation: [0.0, 0.2, 1.1], position: [-0.7, 0.5, 0] },
+      rightArm: { rotation: [0.1, 0, -0.2], position: [1.0, 0, 0] },
+      leftHand: { rotation: [0, 0, 0], fingers: 'open' },
+      rightHand: { rotation: [0, 0, 0], fingers: 'relaxed' }
+    },
+    'victory': { // Victory - V sign with fingers
+      leftArm: { rotation: [0.6, 0.2, 0.8], position: [-0.5, 0.4, 0] },
+      rightArm: { rotation: [0.1, 0, -0.2], position: [1.0, 0, 0] },
+      leftHand: { rotation: [0, 0, 0], fingers: 'two' },
+      rightHand: { rotation: [0, 0, 0], fingers: 'relaxed' }
+    },
+    'call': { // Call me - hand to ear like phone
+      leftArm: { rotation: [1.1, 0.4, 0.6], position: [-0.2, 0.7, 0] },
+      rightArm: { rotation: [0.1, 0, -0.2], position: [1.0, 0, 0] },
+      leftHand: { rotation: [0.2, 0, 0.3], fingers: 'call' },
+      rightHand: { rotation: [0, 0, 0], fingers: 'relaxed' }
+    },
+    'good_luck': { // Good luck - thumbs up
+      leftArm: { rotation: [0.4, 0.2, 0.7], position: [-0.5, 0.3, 0] },
+      rightArm: { rotation: [0.1, 0, -0.2], position: [1.0, 0, 0] },
+      leftHand: { rotation: [0, 0, 0], fingers: 'thumbs_up' },
+      rightHand: { rotation: [0, 0, 0], fingers: 'relaxed' }
+    },
+    'char': { // Four - four fingers up
+      leftArm: { rotation: [0.6, 0.2, 0.8], position: [-0.5, 0.4, 0] },
+      rightArm: { rotation: [0.1, 0, -0.2], position: [1.0, 0, 0] },
+      leftHand: { rotation: [0, 0, 0], fingers: 'four' },
+      rightHand: { rotation: [0, 0, 0], fingers: 'fist' }
+    },
+    'panch': { // Five - all fingers up
+      leftArm: { rotation: [0.5, 0.2, 0.9], position: [-0.6, 0.4, 0] },
+      rightArm: { rotation: [0.1, 0, -0.2], position: [1.0, 0, 0] },
+      leftHand: { rotation: [0, 0, 0], fingers: 'open' },
+      rightHand: { rotation: [0, 0, 0], fingers: 'relaxed' }
+    },
+    'madad': { // Help - reaching out gesture
+      leftArm: { rotation: [0.2, 0.3, 1.0], position: [-0.9, 0.3, 0] },
+      rightArm: { rotation: [0.2, -0.3, -1.0], position: [0.9, 0.3, 0] },
+      leftHand: { rotation: [0, 0, 0.1], fingers: 'open' },
+      rightHand: { rotation: [0, 0, -0.1], fingers: 'open' }
+    },
+    
+    // Family members
+    'maa': { // Mother - gentle protective gesture
+      leftArm: { rotation: [0.4, 0.3, 0.7], position: [-0.4, 0.3, 0] },
+      rightArm: { rotation: [0.4, -0.3, -0.7], position: [0.4, 0.3, 0] },
+      leftHand: { rotation: [0, 0, 0.1], fingers: 'open' },
+      rightHand: { rotation: [0, 0, -0.1], fingers: 'open' }
+    },
+    'baap': { // Father - strong supportive gesture
+      leftArm: { rotation: [0.3, 0.2, 0.6], position: [-0.6, 0.2, 0] },
+      rightArm: { rotation: [0.3, -0.2, -0.6], position: [0.6, 0.2, 0] },
+      leftHand: { rotation: [0, 0, 0], fingers: 'open' },
+      rightHand: { rotation: [0, 0, 0], fingers: 'open' }
+    },
+    'bhai': { // Brother - friendly gesture
+      leftArm: { rotation: [0.5, 0.4, 0.8], position: [-0.7, 0.4, 0] },
+      rightArm: { rotation: [0.2, 0, -0.3], position: [1.0, 0, 0] },
+      leftHand: { rotation: [0, 0, 0.2], fingers: 'open' },
+      rightHand: { rotation: [0, 0, 0], fingers: 'relaxed' }
+    },
+    'behan': { // Sister - gentle caring gesture
+      leftArm: { rotation: [0.4, 0.3, 0.6], position: [-0.5, 0.3, 0] },
+      rightArm: { rotation: [0.4, -0.3, -0.6], position: [0.5, 0.3, 0] },
+      leftHand: { rotation: [0, 0, 0.1], fingers: 'open' },
+      rightHand: { rotation: [0, 0, -0.1], fingers: 'open' }
+    },
+    
+    // Objects and places
+    'ghar': { // Home - roof gesture with both hands
+      leftArm: { rotation: [1.0, 0.5, 1.2], position: [-0.3, 0.8, 0] },
+      rightArm: { rotation: [1.0, -0.5, -1.2], position: [0.3, 0.8, 0] },
+      leftHand: { rotation: [0, 0.3, 0], fingers: 'open' },
+      rightHand: { rotation: [0, -0.3, 0], fingers: 'open' }
+    },
+    'kitab': { // Book - open book gesture
+      leftArm: { rotation: [0.3, 0.4, 0.7], position: [-0.4, 0.3, 0] },
+      rightArm: { rotation: [0.3, -0.4, -0.7], position: [0.4, 0.3, 0] },
+      leftHand: { rotation: [0, 0.2, 0], fingers: 'open' },
+      rightHand: { rotation: [0, -0.2, 0], fingers: 'open' }
+    },
+    'kaam': { // Work - working with hands
+      leftArm: { rotation: [0.6, 0.3, 0.8], position: [-0.5, 0.2, 0] },
+      rightArm: { rotation: [0.6, -0.3, -0.8], position: [0.5, 0.2, 0] },
+      leftHand: { rotation: [0, 0, 0], fingers: 'fist' },
+      rightHand: { rotation: [0, 0, 0], fingers: 'fist' }
+    },
+    'dost': { // Friend - welcoming gesture
+      leftArm: { rotation: [0.2, 0.3, 0.9], position: [-0.8, 0.2, 0] },
+      rightArm: { rotation: [0.2, -0.3, -0.9], position: [0.8, 0.2, 0] },
+      leftHand: { rotation: [0, 0, 0.1], fingers: 'open' },
+      rightHand: { rotation: [0, 0, -0.1], fingers: 'open' }
+    },
+    'khuda_hafiz': { // Goodbye - waving gesture
+      leftArm: { rotation: [0.3, 0.2, 1.0], position: [-0.8, 0.4, 0] },
+      rightArm: { rotation: [0.3, -0.2, -1.0], position: [0.8, 0.4, 0] },
+      leftHand: { rotation: [0, 0, 0.2], fingers: 'open' },
+      rightHand: { rotation: [0, 0, -0.2], fingers: 'open' },
+      wave: true
     }
   };
 
