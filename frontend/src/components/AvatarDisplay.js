@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
 import { Text, OrbitControls } from '@react-three/drei';
+import { TextureLoader } from 'three';
 import * as THREE from 'three';
 
 // 3D Avatar Component
