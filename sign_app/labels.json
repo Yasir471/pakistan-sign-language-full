@@ -130,5 +130,15 @@
   "128": {"name": "looking", "urdu": "دیکھنا", "pashto": "کتل", "english": "Looking"},
   "129": {"name": "thinking", "urdu": "سوچنا", "pashto": "فکر کول", "english": "Thinking"},
   "130": {"name": "laughing", "urdu": "ہنسنا", "pashto": "خندا", "english": "Laughing"},
-  "131": {"name": "crying", "urdu": "رونا", "pashto": "ژړا", "english": "Crying"}
+  "131": {"name": "crying", "urdu": "رونا", "pashto": "ژړا", "english": "Crying"},
+  "132": {"name": "please", "urdu": "برائے کرم", "pashto": "مهرباني", "english": "Please"},
+  "133": {"name": "sorry", "urdu": "معاف کریں", "pashto": "بخښنه", "english": "Sorry"},
+  "134": {"name": "ok", "urdu": "ٹھیک ہے", "pashto": "ښه دی", "english": "OK"},
+  "135": {"name": "stop", "urdu": "رک جاؤ", "pashto": "ودرېږه", "english": "Stop"},
+  "136": {"name": "victory", "urdu": "فتح", "pashto": "بریا", "english": "Victory"},
+  "137": {"name": "call", "urdu": "فون کرو", "pashto": "زنګ وهل", "english": "Call"},
+  "138": {"name": "good_luck", "urdu": "خوش قسمتی", "pashto": "ښه پاتې راشه", "english": "Good Luck"},
+  "139": {"name": "eat", "urdu": "کھانے کا", "pashto": "خوړل", "english": "Eat"},
+  "140": {"name": "drink", "urdu": "پیاس", "pashto": "څښاک", "english": "Drink"},
+  "141": {"name": "more", "urdu": "اور", "pashto": "نور", "english": "More"}
 }
