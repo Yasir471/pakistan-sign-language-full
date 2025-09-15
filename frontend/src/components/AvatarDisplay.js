@@ -272,38 +272,38 @@ const SignLanguageAvatar = ({ currentGesture, isAnimating }) => {
         </mesh>
       </group>
 
-      {/* Left Arm */}
+      {/* Enhanced Left Arm - Light shirt sleeves */}
       <group ref={leftArmRef} position={[-1.2, 2, 0]}>
-        {/* Upper Arm */}
+        {/* Upper Arm with shirt sleeve */}
         <mesh position={[0, -0.3, 0]}>
-          <cylinderGeometry args={[0.08, 0.1, 0.6, 8]} />
-          <meshStandardMaterial color="#DCAA7B" />
+          <cylinderGeometry args={[0.09, 0.11, 0.7, 10]} />
+          <meshStandardMaterial color="#F8F8FF" roughness={0.5} />
         </mesh>
-        {/* Forearm */}
-        <mesh position={[0, -0.8, 0]}>
-          <cylinderGeometry args={[0.06, 0.08, 0.5, 8]} />
-          <meshStandardMaterial color="#DCAA7B" />
+        {/* Forearm - skin showing */}
+        <mesh position={[0, -0.9, 0]}>
+          <cylinderGeometry args={[0.07, 0.09, 0.6, 10]} />
+          <meshStandardMaterial color="#F4C2A1" roughness={0.6} />
         </mesh>
         {/* Left Hand */}
-        <group ref={leftHandRef} position={[0, -1.2, 0]}>
+        <group ref={leftHandRef} position={[0, -1.3, 0]}>
           <Hand gesture={currentGesture} side="left" />
         </group>
       </group>
 
-      {/* Right Arm */}
+      {/* Enhanced Right Arm - Light shirt sleeves */}
       <group ref={rightArmRef} position={[1.2, 2, 0]}>
-        {/* Upper Arm */}
+        {/* Upper Arm with shirt sleeve */}
         <mesh position={[0, -0.3, 0]}>
-          <cylinderGeometry args={[0.08, 0.1, 0.6, 8]} />
-          <meshStandardMaterial color="#DCAA7B" />
+          <cylinderGeometry args={[0.09, 0.11, 0.7, 10]} />
+          <meshStandardMaterial color="#F8F8FF" roughness={0.5} />
         </mesh>
-        {/* Forearm */}
-        <mesh position={[0, -0.8, 0]}>
-          <cylinderGeometry args={[0.06, 0.08, 0.5, 8]} />
-          <meshStandardMaterial color="#DCAA7B" />
+        {/* Forearm - skin showing */}
+        <mesh position={[0, -0.9, 0]}>
+          <cylinderGeometry args={[0.07, 0.09, 0.6, 10]} />
+          <meshStandardMaterial color="#F4C2A1" roughness={0.6} />
         </mesh>
         {/* Right Hand */}
-        <group ref={rightHandRef} position={[0, -1.2, 0]}>
+        <group ref={rightHandRef} position={[0, -1.3, 0]}>
           <Hand gesture={currentGesture} side="right" />
         </group>
       </group>
