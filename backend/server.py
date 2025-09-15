@@ -724,29 +724,37 @@ async def text_to_sign(request: dict):
                 "session_id": session_id
             }
         
-        # Enhanced text-to-gesture mapping with Urdu/Pashto support
+        # Enhanced text-to-gesture mapping with Urdu/Pashto support based on reference images
         urdu_to_english_mapping = {
-            # Greetings
+            # Greetings and politeness
             'سلام': 'salam',
             'سلامات': 'salam', 
             'السلام علیکم': 'salam',
             'نمسکار': 'salam',
-            
-            # Thank you variations
             'شکریہ': 'shukriya',
             'شكريه': 'shukriya',
             'تھینک یو': 'shukriya',
             'مننه': 'shukriya',  # Pashto
+            'برائے کرم': 'please',
+            'مہربانی': 'please',
+            'معاف کریں': 'sorry',
+            'بخشیں': 'sorry',
+            'معذرت': 'sorry',
             
-            # Basic needs
+            # Basic needs and actions
             'پانی': 'paani',
             'اوبه': 'paani',  # Pashto
             'کھانا': 'khana',
             'خواړه': 'khana',  # Pashto
+            'کھانے کا': 'eat',
+            'پینا': 'drink',
+            'پیاس': 'drink',
+            'اور': 'more',
+            'زیادہ': 'more',
             'مدد': 'madad',
             'مرسته': 'madad',  # Pashto
             
-            # Numbers
+            # Numbers (Urdu/Pashto)
             'ایک': 'ek',
             'یو': 'ek',  # Pashto
             'دو': 'do',
@@ -758,7 +766,7 @@ async def text_to_sign(request: dict):
             'پانچ': 'panch',
             'پنځه': 'panch',  # Pashto
             
-            # Family
+            # Family relationships
             'ماں': 'maa',
             'مور': 'maa',  # Pashto
             'باپ': 'baap',
@@ -768,7 +776,19 @@ async def text_to_sign(request: dict):
             'بہن': 'behan',
             'خور': 'behan',  # Pashto
             
-            # Common words
+            # Common expressions and gestures
+            'ٹھیک ہے': 'ok',
+            'اوکے': 'ok',
+            'رک جاؤ': 'stop',
+            'رکو': 'stop',
+            'فتح': 'victory',
+            'کامیابی': 'victory',
+            'فون کرو': 'call',
+            'کال': 'call',
+            'خوش قسمتی': 'good_luck',
+            'بہترین': 'good_luck',
+            
+            # Common places and objects
             'گھر': 'ghar',
             'کور': 'ghar',  # Pashto
             'کتاب': 'kitab',
@@ -778,33 +798,100 @@ async def text_to_sign(request: dict):
             'دوست': 'dost',
             'ملګری': 'dost',  # Pashto
             
-            # Goodbye
+            # Farewells
             'خدا حافظ': 'khuda_hafiz',
+            'الوداع': 'khuda_hafiz',
             'د خدای په امان': 'khuda_hafiz'  # Pashto
         }
         
-        # Also check direct English mapping
+        # Enhanced English to gesture mapping
         english_to_gesture_mapping = {
+            # Basic greetings
             'hello': 'salam',
             'hi': 'salam',
             'salam': 'salam',
+            'greetings': 'salam',
+            
+            # Politeness
             'thank you': 'shukriya',
             'thanks': 'shukriya',
             'shukriya': 'shukriya',
+            'please': 'please',
+            'sorry': 'sorry',
+            'excuse me': 'sorry',
+            'apologize': 'sorry',
+            
+            # Daily needs
             'water': 'paani',
             'paani': 'paani',
             'food': 'khana',
             'khana': 'khana',
+            'eat': 'eat',
+            'eating': 'eat',
+            'drink': 'drink',
+            'drinking': 'drink',
+            'more': 'more',
             'help': 'madad',
             'madad': 'madad',
+            'assistance': 'madad',
+            
+            # Numbers
             'one': 'ek',
             'ek': 'ek',
             'two': 'do',
             'do': 'do',
             'three': 'teen',
             'teen': 'teen',
+            'four': 'char',
+            'char': 'char',
+            'five': 'panch',
+            'panch': 'panch',
+            
+            # Family
+            'mother': 'maa',
+            'mom': 'maa',
+            'maa': 'maa',
+            'father': 'baap',
+            'dad': 'baap',
+            'baap': 'baap',
+            'brother': 'bhai',
+            'bhai': 'bhai',
+            'sister': 'behan',
+            'behan': 'behan',
+            
+            # Common gestures
+            'ok': 'ok',
+            'okay': 'ok',
+            'alright': 'ok',
+            'stop': 'stop',
+            'halt': 'stop',
+            'victory': 'victory',
+            'win': 'victory',
+            'success': 'victory',
+            'call': 'call',
+            'phone': 'call',
+            'call me': 'call',
+            'good luck': 'good_luck',
+            'best wishes': 'good_luck',
+            'thumbs up': 'good_luck',
+            
+            # Places and objects
+            'home': 'ghar',
+            'house': 'ghar',
+            'ghar': 'ghar',
+            'book': 'kitab',
+            'kitab': 'kitab',
+            'work': 'kaam',
+            'job': 'kaam',
+            'kaam': 'kaam',
+            'friend': 'dost',
+            'dost': 'dost',
+            
+            # Farewells
             'goodbye': 'khuda_hafiz',
-            'bye': 'khuda_hafiz'
+            'bye': 'khuda_hafiz',
+            'farewell': 'khuda_hafiz',
+            'see you': 'khuda_hafiz'
         }
         
         # Normalize and find gesture
